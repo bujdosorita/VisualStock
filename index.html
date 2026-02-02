@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualStock Raktár</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#16213e">
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            <h1>VISUALSTOCK</h1>
+            <div class="subtitle">Üzletberendezés Raktár - Élőkép</div>
+        </div>
+        
+        <div class="header-right">
+            
+            <button class="btn-sync" onclick="simulateSync()">
+                🔄 Adatok Szinkronizálása
+            </button>
+            
+            <div class="badge-kulcssoft">
+                🔵 Kulcs-Soft Adatcsere: KOMPATIBILIS
+            </div>
+
+            <div class="clock-badge">
+                Online ● <span id="clock">--:--</span>
+            </div>
+
+        </div>
+    </header>
+
+    <div class="controls-container">
+        <input type="text" id="searchInput" placeholder="🔍 Keresés név vagy cikkszám alapján..." onkeyup="filterStock()">
+        
+        <div class="category-buttons">
+            <button onclick="filterCategory('all', true)" class="active-btn">Összes Termék</button>
+            <button onclick="filterCategory('sztender')">Sztenderek, Ruhaállványok</button>
+            <button onclick="filterCategory('vallfa')">Vállfák (Fa, Műanyag, Fém)</button>
+            <button onclick="filterCategory('belovo')">Belövőszál, Címke, Festékszalag</button>
+            <button onclick="filterCategory('arazo')">Árazógépek, Szalagok</button>
+            <button onclick="filterCategory('ruhazsak')">Ruhazsák, Öltönyzsák</button>
+            <button onclick="filterCategory('kosar')">Bevásárló Kosár</button>
+            <button onclick="filterCategory('penztar')">Pénztárgépszalagok</button>
+            <button onclick="filterCategory('iroda')">Irodaszerek, Csomagolás</button>
+        </div>
+    </div>
+
+    <div id="app" class="grid-container"></div>
+
+    <script src="script.js?v=11"></script>
+</body>
+</html>
