@@ -54,14 +54,6 @@ Szeretnéd alkalmazásként használni?
 
 ---
 
-## 📸 Képernyőképek
-
-| Főoldal | Keresés |
-|:---:|:---:|
-| <img src="IMG_9300.PNG" width="400"> | <img src="Képernyőkép 2026-02-02 111521.png" width="400"> |
-
----
-
 ## ⚠️ Hibaelhárítás
 **"Demo Mód" felirat jelenik meg / Nem töltenek be a termékek?**
 > Ez akkor fordul elő, ha közvetlenül nyitod meg az `index.html` fájlt szerver nélkül. Ilyenkor a rendszer **mintaadatokkal** működik, hogy a dizájn tesztelhető legyen. A teljes funkcionalitáshoz használd a fenti telepítési lépéseket!
