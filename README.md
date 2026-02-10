@@ -1,38 +1,72 @@
-# VisualStock - Raktárkezelő Rendszer 📦
+# 📦 VISUALSTOCK
+### Modern Üzletberendezés Raktárkezelő Rendszer
 
-Ez a projekt egy modern, valós idejű raktárkészlet-kezelő alkalmazás (PWA), amely PHP backendet és MySQL adatbázist használ. A rendszer támogatja a mobilos nézetet és a szimulált ERP szinkronizációt.
+![Banner](IMG_9299.PNG)
 
-## 🛠 Technológiák
-- **Frontend:** HTML5, CSS3 (Grid/Flexbox), JavaScript (Fetch API)
-- **Backend:** PHP (Native)
-- **Adatbázis:** MySQL
-- **Design:** Reszponzív, Dark Mode UI
+A **VisualStock** egy modern, **Neon/Cyberpunk** stílusú raktárkészlet-kezelő webalkalmazás (PWA), amelyet kifejezetten üzletberendezések (sztenderek, vállfák, árazók) nyilvántartására terveztek.
 
-## 🚀 Telepítés és Beüzemelés
+> 🚀 **Kulcs-Soft Kompatibilis** | 📱 **PWA Támogatás** | 🌙 **Premium Dark Mode**
 
-A szoftver futtatásához XAMPP vagy hasonló webszerver szükséges.
+---
 
-1. **Fájlok másolása:**
-   Másold a projekt tartalmát a webszerver gyökérkönyvtárába (pl. `C:\xampp\htdocs\VisualStock`).
+## ✨ Kiemelt Funkciók
 
-2. **Adatbázis létrehozása:**
-   - Nyisd meg a phpMyAdmin-t.
-   - Hozz létre egy új adatbázist `visualstock` néven.
-   - Importáld a mellékelt `visualstock.sql` fájlt.
+- **🎨 Modern Felület**: Látványos sötét téma neon cián/lila színekkel és üveghatású (glassmorphism) elemekkel.
+- **⚡ Gyors Keresés**: Azonnali szűrés név vagy cikkszám alapján.
+- **📱 PWA (App) Mód**: Telepíthető eszközre, így natív alkalmazásként viselkedik (ikon az asztalon, teljes képernyős mód).
+- **🚦 Intelligens Készletjelző**:
+  - 🟢 **Zöld**: Bőséges készlet (>40%)
+  - 🟡 **Sárga**: Fogyóban (<40%)
+  - 🔴 **Piros**: Kritikus / Hiánycikk (<20%)
+- **🔄 Adatszinkronizáció**: Szimulált kapcsolat külső rendszerekkel (pl. Kulcs-Soft).
 
-3. **Konfiguráció:**
-   - Az `api.php` fájl alapértelmezetten a `root` felhasználót és üres jelszót használ (XAMPP standard).
+---
 
-## ✨ Funkciók
-- **Valós idejű készletkövetés**
-- **Kulcs-Soft szinkronizáció szimulálása**
-- **Gyorsszűrők és Keresés**
+## 🛠️ Technológiai Háttér
 
-## 📱 Telepítés Alkalmazásként (PWA)
+A projekt a következő technológiákra épül:
+- **Frontend**: HTML5, CSS3 (CSS Variables, Flexbox/Grid), JavaScript (ES6+).
+- **Backend**: Nativ PHP.
+- **Adatbázis**: MySQL (`visualstock.sql`).
+- **Ikonok**: [Phosphor Icons](https://phosphoricons.com/).
+- **Betűtípus**: [Outfit](https://fonts.google.com/specimen/Outfit) (Google Fonts).
 
-Ez a rendszer **Progressive Web App (PWA)** technológiát használ, így nemcsak böngészőből, hanem telepített asztali alkalmazásként is futtatható.
+---
 
-**Így próbálhatod ki:**
-1. Nyisd meg az oldalt Google Chrome vagy Microsoft Edge böngészőben.
-2. A címsor jobb szélén kattints a **Telepítés (monitor/letöltés ikon)** gombra.
-3. A szoftver ekkor külön ablakban, böngészőkeret nélkül nyílik meg, mint egy natív raktárkezelő program.
+## 🚀 Telepítés és Használat
+
+A program működéséhez **webszerverre** van szükség (mivel PHP alapú Backend szolgálja ki az adatokat).
+
+### 1️⃣ Webszerver beállítása (Ajánlott)
+Ha van **XAMPP** vagy **WAMP** telepítve:
+1. Másold a projekt mappáját a `htdocs` mappába (pl. `C:\xampp\htdocs\VisualStock`).
+2. Indítsd el az Apache és MySQL modulokat.
+3. Importáld a `visualstock.sql` fájlt phpMyAdmin-ban.
+4. Nyisd meg a böngészőben: `http://localhost/VisualStock`
+
+### 2️⃣ VS Code "PHP Server" (Fejlesztéshez)
+1. Telepítsd a **PHP Server** kiegészítőt Visual Studio Code-ban.
+2. Jobb klikk az `index.html` fájlon -> **PHP Server: Serve project**.
+
+### 📱 Telepítés Mobilon / Asztali Gépen (PWA)
+Szeretnéd alkalmazásként használni?
+1. Nyisd meg a programot Chrome-ban vagy Edge-ben.
+2. Kattints a címsor végén lévő **Telepítés** ikonra (monitor lefelé nyíllal).
+3. Élvezd a teljes képernyős, alkalmazás-szerű élményt!
+
+---
+
+## 📸 Képernyőképek
+
+| Főoldal | Keresés |
+|:---:|:---:|
+| <img src="IMG_9300.PNG" width="400"> | <img src="Képernyőkép 2026-02-02 111521.png" width="400"> |
+
+---
+
+## ⚠️ Hibaelhárítás
+**"Demo Mód" felirat jelenik meg / Nem töltenek be a termékek?**
+> Ez akkor fordul elő, ha közvetlenül nyitod meg az `index.html` fájlt szerver nélkül. Ilyenkor a rendszer **mintaadatokkal** működik, hogy a dizájn tesztelhető legyen. A teljes funkcionalitáshoz használd a fenti telepítési lépéseket!
+
+---
+© 2026 VisualStock Team
