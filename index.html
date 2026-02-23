@@ -1,56 +1,82 @@
 <!DOCTYPE html>
 <html lang="hu">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VisualStock Raktár</title>
+    <title>VisualStock Premium</title>
+    <meta name="theme-color" content="#050510">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#16213e">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
 </head>
+
 <body>
 
+    <div class="app-background"></div>
+
     <header>
-        <div class="brand">
-            <h1>VISUALSTOCK</h1>
-            <div class="subtitle">Üzletberendezés Raktár - Élőkép</div>
-        </div>
-        
-        <div class="header-right">
-            
-            <button class="btn-sync" onclick="simulateSync()">
-                🔄 Adatok Szinkronizálása
-            </button>
-            
-            <div class="badge-kulcssoft">
-                🔵 Kulcs-Soft Adatcsere: KOMPATIBILIS
+        <div class="header-content">
+            <div class="brand">
+                <div class="logo-icon"><i class="ph-fill ph-cube-transparent"></i></div>
+                <div>
+                    <h1>VISUALSTOCK</h1>
+                    <div class="subtitle">Üzletberendezés Raktár <span class="divider">///</span> Élőkép</div>
+                </div>
             </div>
 
-            <div class="clock-badge">
-                Online ● <span id="clock">--:--</span>
-            </div>
+            <div class="header-right">
 
+                <div class="system-status">
+                    <div class="badge-kulcssoft">
+                        <i class="ph-bold ph-arrows-left-right"></i> Kulcs-Soft Kapcsolat
+                        <span class="status-dot online"></span>
+                    </div>
+
+                    <div class="clock-badge">
+                        <i class="ph-bold ph-clock"></i> <span id="clock">--:--</span>
+                    </div>
+                </div>
+
+                <button class="btn-sync" onclick="simulateSync()">
+                    <i class="ph-bold ph-arrows-clockwise"></i> <span>Adatok Szinkronizálása</span>
+                </button>
+
+            </div>
         </div>
     </header>
 
-    <div class="controls-container">
-        <input type="text" id="searchInput" placeholder="🔍 Keresés név vagy cikkszám alapján..." onkeyup="filterStock()">
-        
-        <div class="category-buttons">
-            <button onclick="filterCategory('all', true)" class="active-btn">Összes Termék</button>
-            <button onclick="filterCategory('sztender')">Sztenderek, Ruhaállványok</button>
-            <button onclick="filterCategory('vallfa')">Vállfák (Fa, Műanyag, Fém)</button>
-            <button onclick="filterCategory('belovo')">Belövőszál, Címke, Festékszalag</button>
-            <button onclick="filterCategory('arazo')">Árazógépek, Szalagok</button>
-            <button onclick="filterCategory('ruhazsak')">Ruhazsák, Öltönyzsák</button>
-            <button onclick="filterCategory('kosar')">Bevásárló Kosár</button>
-            <button onclick="filterCategory('penztar')">Pénztárgépszalagok</button>
-            <button onclick="filterCategory('iroda')">Irodaszerek, Csomagolás</button>
+    <main class="controls-container">
+        <div class="search-wrapper">
+            <i class="ph-bold ph-magnifying-glass search-icon"></i>
+            <input type="text" id="searchInput" placeholder="Keresés név vagy cikkszám alapján..."
+                onkeyup="filterStock()">
         </div>
-    </div>
+
+        <div class="category-buttons">
+            <button onclick="filterCategory('all', true)" class="active-btn"><i class="ph-fill ph-squares-four"></i>
+                Összes</button>
+            <button onclick="filterCategory('sztender')"><i class="ph-bold ph-coat-hanger"></i> Sztenderek</button>
+            <button onclick="filterCategory('vallfa')"><i class="ph-bold ph-t-shirt"></i> Vállfák</button>
+            <button onclick="filterCategory('belovo')"><i class="ph-bold ph-tag"></i> Címkézés</button>
+            <button onclick="filterCategory('arazo')"><i class="ph-bold ph-currency-circle-dollar"></i> Árazás</button>
+            <button onclick="filterCategory('ruhazsak')"><i class="ph-bold ph-bag"></i> Csomagolás</button>
+            <button onclick="filterCategory('kosar')"><i class="ph-bold ph-shopping-cart"></i> Kosarak</button>
+            <button onclick="filterCategory('penztar')"><i class="ph-bold ph-receipt"></i> Pénztár</button>
+            <button onclick="filterCategory('iroda')"><i class="ph-bold ph-paperclip"></i> Iroda</button>
+        </div>
+    </main>
 
     <div id="app" class="grid-container"></div>
 
-    <script src="script.js?v=11"></script>
+    <!-- Footer decoration or info could go here -->
+
+    <script src="script.js?v=12"></script>
 </body>
+
 </html>

@@ -1,6 +1,8 @@
 # 📦 VISUALSTOCK
 ### Modern Üzletberendezés Raktárkezelő Rendszer
 
+![Banner](IMG_9299.PNG)
+
 A **VisualStock** egy modern, **Neon/Cyberpunk** stílusú raktárkészlet-kezelő webalkalmazás (PWA), amelyet kifejezetten üzletberendezések (sztenderek, vállfák, árazók) nyilvántartására terveztek.
 
 > 🚀 **Kulcs-Soft Kompatibilis** | 📱 **PWA Támogatás** | 🌙 **Premium Dark Mode**
@@ -51,6 +53,14 @@ Szeretnéd alkalmazásként használni?
 1. Nyisd meg a programot Chrome-ban vagy Edge-ben.
 2. Kattints a címsor végén lévő **Telepítés** ikonra (monitor lefelé nyíllal).
 3. Élvezd a teljes képernyős, alkalmazás-szerű élményt!
+
+---
+
+## 📸 Képernyőképek
+
+| Főoldal | Keresés |
+|:---:|:---:|
+| <img src="IMG_9300.PNG" width="400"> | <img src="Képernyőkép 2026-02-02 111521.png" width="400"> |
 
 ---
 

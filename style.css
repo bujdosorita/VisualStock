@@ -1,129 +1,557 @@
-/* --- VISUALSTOCK DESIGN - STABIL VERZIÓ --- */
+/* --- VISUALSTOCK NEON EDITION --- */
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #1a1a2e;
-    color: #ecf0f1;
-    margin: 0;
-    padding: 20px;
-    padding-bottom: 80px;
+:root {
+    /* --- PALETTE: Cyberpunk/Neon (Brightened) --- */
+    --bg-dark: #0f172a;
+    /* Világosabb mélykék (Slate 900) */
+    --card-bg: #243045;
+    /* Még világosabb kártyák (Láthatóbb) */
+    --card-hover: #303e58;
+    /* Hover állapot */
+
+    /* Neon Accents */
+    --neon-cyan: #22d3ee;
+    /* Világosabb cián */
+    --neon-magenta: #e879f9;
+    /* Lágyabb lila */
+    --neon-blue: #60a5fa;
+    /* Világosabb kék */
+    --neon-purple: #a855f7;
+
+    /* Text */
+    --text-main: #f8fafc;
+    /* Hófehér */
+    --text-muted: #94a3b8;
+    /* Világosabb szürke */
+
+    /* --- RESTRICTED STOCK COLORS (TRAFFIC LIGHT) --- */
+    /* Only for stock indicators! */
+    --stock-green: #4ade80;
+    /* Élénkebb zöld */
+    --stock-yellow: #facc15;
+    /* Élénkebb sárga */
+    --stock-red: #f87171;
+    /* Lágyabb piros */
+
+    /* Dimensions */
+    --header-height: 80px;
+    --border-radius: 16px;
+    /* Kicsit kerekebb */
 }
 
-/* --- FEJLÉC --- */
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-dark);
+    /* Subtle gradient to add light */
+    background-image:
+        radial-gradient(circle at top center, rgba(34, 211, 238, 0.08), transparent 40%);
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    padding-bottom: 80px;
+    overflow-x: hidden;
+}
+
+/* Background Ambient Glow REMOVED/UPDATED in body */
+.app-background {
+    display: none;
+    /* Kikapcsoljuk a régi sötét hátteret */
+}
+
+/* --- HEADER --- */
 header {
+    background: rgba(5, 5, 16, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 15px 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.header-content {
+    max-width: 1400px;
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start; /* Fentről igazítjuk */
-    border-bottom: 1px solid #2c3e50;
-    padding-bottom: 20px;
-    margin-bottom: 25px;
+    align-items: center;
     flex-wrap: wrap;
     gap: 20px;
 }
 
-.brand h1 {
-    margin: 0; font-size: 1.8rem; color: #4aa96c;
-    text-transform: uppercase; font-weight: 800; letter-spacing: 1px;
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
-.brand .subtitle { font-size: 0.9rem; color: #aeb6bf; margin-top: 5px; }
 
-/* JOBB OLDALI BLOKK */
+.logo-icon {
+    font-size: 2.5rem;
+    color: var(--neon-cyan);
+    filter: drop-shadow(0 0 5px var(--neon-cyan));
+    animation: pulseLogo 3s infinite alternate;
+}
+
+.brand h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    background: linear-gradient(90deg, #fff, var(--text-muted));
+    -webkit-background-clip: text;
+    background-clip: text;
+    /* Standard property added */
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* ... existing styles ... */
+
+/* Minus Button - Active/Visible */
+.btn-minus {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    /* Visible border */
+    color: #ffffff;
+    /* Bright white */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-minus:hover {
+    background-color: rgba(232, 121, 249, 0.15);
+    /* Soft Magenta tint */
+    border-color: var(--neon-magenta);
+    color: var(--neon-magenta);
+    box-shadow: 0 0 10px rgba(232, 121, 249, 0.3);
+}
+
+.brand .subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+.brand .divider {
+    color: var(--neon-magenta);
+    font-weight: bold;
+    margin: 0 5px;
+}
+
+/* Header Right Side */
 .header-right {
     display: flex;
-    flex-direction: column; /* Egymás alatt */
-    align-items: flex-end;  /* Jobbra húzva */
-    gap: 15px; /* NAGYOBB TÉRKÖZ - Itt a lényeg! */
+    align-items: center;
+    gap: 20px;
 }
 
-/* 1. Szinkron Gomb */
-.btn-sync {
-    background: transparent;
-    border: 1px solid #ffffff;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.9rem;
-    display: flex; align-items: center; gap: 8px;
-}
-.btn-sync:hover { background: rgba(255,255,255,0.1); }
-
-/* 2. Kulcs-Soft Címke */
-.badge-kulcssoft {
-    background-color: #2980b9;
-    color: white;
-    padding: 6px 15px;
-    border-radius: 20px;
+.system-status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
     font-size: 0.8rem;
-    font-weight: bold;
-    border: 1px solid #3498db;
-    box-shadow: 0 0 8px rgba(41, 128, 185, 0.4);
 }
 
-/* 3. Óra - Biztosan látható színnel */
+.badge-kulcssoft {
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #555;
+    box-shadow: 0 0 5px #555;
+}
+
+.status-dot.online {
+    background-color: var(--neon-cyan);
+    box-shadow: 0 0 8px var(--neon-cyan);
+}
+
 .clock-badge {
-    color: #4aa96c; /* Élénk zöld */
+    color: var(--neon-blue);
+    font-family: monospace;
     font-size: 0.9rem;
     font-weight: bold;
-    font-family: monospace;
-    background-color: rgba(74, 169, 108, 0.1);
-    padding: 5px 10px;
-    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-/* --- VEZÉRLŐK --- */
-.controls-container { margin-bottom: 25px; }
+/* Sync Button - NO TRAFFIC LIGHT COLORS */
+.btn-sync {
+    background: rgba(77, 77, 255, 0.1);
+    border: 1px solid var(--neon-blue);
+    color: var(--neon-blue);
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-sync:hover {
+    background: var(--neon-blue);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(77, 77, 255, 0.4);
+}
+
+.btn-sync i {
+    font-size: 1.2rem;
+}
+
+/* LOADING / SUCCESS STATES for Sync (Cyan/Purple) */
+.btn-sync.loading {
+    border-color: var(--neon-purple);
+    color: var(--neon-purple);
+    background: rgba(157, 0, 255, 0.1);
+}
+
+.btn-sync.success {
+    border-color: var(--neon-cyan);
+    color: var(--neon-cyan);
+    background: rgba(0, 243, 255, 0.1);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+}
+
+/* --- CONTROLS --- */
+.controls-container {
+    max-width: 1400px;
+    margin: 30px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Search Bar */
+.search-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.search-wrapper .search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    transition: color 0.3s;
+}
 
 #searchInput {
-    width: 100%; padding: 12px; font-size: 1rem;
-    background-color: #1f2a40; border: 1px solid #34495e;
-    color: white; border-radius: 8px; margin-bottom: 15px;
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    font-size: 1rem;
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
     box-sizing: border-box;
 }
 
-.category-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+#searchInput:focus {
+    outline: none;
+    border-color: var(--neon-magenta);
+    box-shadow: 0 0 10px rgba(189, 0, 255, 0.2);
+}
+
+#searchInput:focus+.search-icon {
+    color: var(--neon-magenta);
+}
+
+/* Filter Buttons */
+.category-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    /* Center buttons on large screens */
+}
 
 .category-buttons button {
-    background-color: #1f2a40; color: #bdc3c7;
-    border: 1px solid #34495e; padding: 10px 15px;
-    border-radius: 20px; cursor: pointer;
-    font-size: 0.8rem; font-weight: 600;
-    flex: 1 1 auto; white-space: nowrap; text-align: center;
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 18px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
 }
+
+.category-buttons button:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
 .category-buttons button.active-btn {
-    background-color: #4aa96c; color: white; border-color: #4aa96c;
+    background: linear-gradient(135deg, rgba(77, 77, 255, 0.2), rgba(189, 0, 255, 0.2));
+    border-color: var(--neon-blue);
+    color: white;
+    box-shadow: 0 0 10px rgba(77, 77, 255, 0.2);
+    font-weight: 600;
 }
 
-/* --- KÁRTYÁK --- */
-.grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+.category-buttons button i {
+    font-size: 1.1rem;
+}
+
+/* --- GRID & CARDS --- */
+.grid-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
 .card {
-    background: linear-gradient(145deg, #2c3e50, #1f2a40);
-    border-radius: 10px; padding: 15px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    border-left: 5px solid transparent;
-    display: flex; flex-direction: column; justify-content: space-between;
-    min-height: 160px;
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 180px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.card-header { margin-bottom: 10px; }
-.termek-nev { font-size: 1rem; font-weight: 700; color: #fff; text-transform: uppercase; }
-.cikkszam { color: #7f8c8d; font-size: 0.75rem; display: block; margin-top: 5px; }
-.keszlet-info { font-size: 1.6rem; font-weight: bold; text-align: right; margin-bottom: 5px; }
-.keszlet-info small { font-size: 0.9rem; color: #95a5a6; font-weight: normal; }
-.progress-container { background-color: #1a252f; height: 8px; border-radius: 4px; width: 100%; overflow: hidden; }
-.progress-bar { height: 100%; border-radius: 4px; transition: width 0.5s; }
-.action-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px; }
-.btn-action { width: 35px; height: 35px; border-radius: 50%; border: none; font-size: 1.2rem; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; }
-.btn-minus { background-color: #7f8c8d; }
-.btn-plus { background-color: #3498db; }
-.bg-green { background-color: #2ecc71 !important; }
-.border-green { border-left-color: #2ecc71; }
-.bg-yellow { background-color: #f1c40f !important; }
-.border-yellow { border-left-color: #f1c40f; }
-.bg-red { background-color: #e74c3c !important; }
-.border-red { border-left-color: #e74c3c; }
 
-button, .btn-action, .btn-sync, .category-buttons button {
-    -webkit-tap-highlight-color: transparent; 
-    user-select: none; touch-action: manipulation;
+.card:hover {
+    transform: translateY(-5px);
+    background-color: var(--card-hover);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4),
+        0 0 15px rgba(77, 77, 255, 0.1);
+    /* Subtle neon glow */
+    border-color: rgba(77, 77, 255, 0.3);
+}
+
+/* Card Header */
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 5px;
+}
+
+.termek-nev {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.cikkszam-badge {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    white-space: nowrap;
+}
+
+/* Stock Info - THE ONLY PLACE FOR RED/YELLOW/GREEN */
+.stock-status {
+    margin: 15px 0;
+}
+
+.stock-numbers {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    margin-bottom: 8px;
+}
+
+.current-qty {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.max-qty {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.progress-track {
+    background-color: rgba(255, 255, 255, 0.08);
+    /* Dark gray track */
+    height: 6px;
+    border-radius: 3px;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+    position: relative;
+}
+
+/* Glow effect only on the bar itself */
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 5px;
+    box-shadow: 0 0 10px 5px currentColor;
+    opacity: 0.6;
+}
+
+/* Stock Colors */
+.stock-high {
+    background-color: var(--stock-green);
+    color: var(--stock-green);
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+.text-green {
+    color: var(--stock-green);
+}
+
+.stock-med {
+    background-color: var(--stock-yellow);
+    color: var(--stock-yellow);
+    box-shadow: 0 0 10px rgba(252, 238, 10, 0.3);
+}
+
+.text-yellow {
+    color: var(--stock-yellow);
+}
+
+.stock-low {
+    background-color: var(--stock-red);
+    color: var(--stock-red);
+    box-shadow: 0 0 10px rgba(255, 0, 60, 0.3);
+}
+
+.text-red {
+    color: var(--stock-red);
+}
+
+
+/* Card Actions */
+.card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 15px;
+}
+
+.btn-action {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    color: white;
+}
+
+/* Minus Button - Active/Visible */
+/* Minus Button - NEON MAGENTA (Visible) */
+.btn-minus {
+    background-color: rgba(232, 121, 249, 0.1);
+    /* Visible base color */
+    border: 1px solid var(--neon-magenta);
+    /* Neon border */
+    color: var(--neon-magenta);
+    /* Neon icon */
+    box-shadow: 0 0 8px rgba(232, 121, 249, 0.2);
+}
+
+.btn-minus:hover {
+    background-color: var(--neon-magenta);
+    color: white;
+    box-shadow: 0 0 15px rgba(232, 121, 249, 0.6);
+    transform: scale(1.1);
+}
+
+/* Plus Button - Vibrant Neon Blue (Not Green!) */
+.btn-plus {
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    box-shadow: 0 4px 10px rgba(77, 77, 255, 0.3);
+}
+
+.btn-plus:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(77, 77, 255, 0.5);
+}
+
+/* Animations */
+@keyframes pulseLogo {
+    from {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+@media (max-width: 600px) {
+    .header-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .header-right {
+        justify-content: space-between;
+        flex-direction: row-reverse;
+    }
+
+    .system-status {
+        align-items: flex-start;
+    }
+
+    .category-buttons {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 5px;
+        flex-wrap: nowrap;
+    }
+
+    .category-buttons button {
+        flex: 0 0 auto;
+    }
+}
+
+button:active {
+    transform: scale(0.95);
 }
