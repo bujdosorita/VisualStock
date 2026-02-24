@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=27">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" sizes="512x512" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
@@ -18,7 +18,11 @@
 
 <body>
 
-    <div class="app-background"></div>
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
 
     <header>
         <div class="header-content">
@@ -61,14 +65,26 @@
         <div class="category-buttons">
             <button onclick="filterCategory('all', true)" class="active-btn"><i class="ph-fill ph-squares-four"></i>
                 Összes</button>
-            <button onclick="filterCategory('sztender')"><i class="ph-bold ph-coat-hanger"></i> Sztenderek</button>
-            <button onclick="filterCategory('vallfa')"><i class="ph-bold ph-t-shirt"></i> Vállfák</button>
-            <button onclick="filterCategory('belovo')"><i class="ph-bold ph-tag"></i> Címkézés</button>
-            <button onclick="filterCategory('arazo')"><i class="ph-bold ph-currency-circle-dollar"></i> Árazás</button>
-            <button onclick="filterCategory('ruhazsak')"><i class="ph-bold ph-bag"></i> Csomagolás</button>
-            <button onclick="filterCategory('kosar')"><i class="ph-bold ph-shopping-cart"></i> Kosarak</button>
-            <button onclick="filterCategory('penztar')"><i class="ph-bold ph-receipt"></i> Pénztár</button>
-            <button onclick="filterCategory('iroda')"><i class="ph-bold ph-paperclip"></i> Iroda</button>
+            <button onclick="filterCategory('sztender')"><i class="ph-bold ph-coat-hanger"></i> Sztenderek,
+                Ruhaállványok</button>
+            <button onclick="filterCategory('vallfa')"><i class="ph-bold ph-t-shirt"></i> Fa és Műanyag Vállfák</button>
+            <button onclick="filterCategory('cimkezo')"><i class="ph-bold ph-tag"></i> Szálbelövők, Ruha Címke</button>
+            <button onclick="filterCategory('vonalcimke')"><i class="ph-bold ph-barcode"></i> Vonalkód- és
+                Körcímkék</button>
+            <button onclick="filterCategory('arazogep')"><i class="ph-bold ph-currency-circle-dollar"></i> Árazógépek és
+                Árazószalagok</button>
+            <button onclick="filterCategory('ruhazsak')"><i class="ph-bold ph-bag"></i> Ruhazsák, Öltönyzsák,
+                Ruhafólia</button>
+            <button onclick="filterCategory('polccimke')"><i class="ph-bold ph-rows"></i> Ársínek, Polccímkék</button>
+            <button onclick="filterCategory('plexitok')"><i class="ph-bold ph-frame-corners"></i> Plexi Laptok, Infó
+                Tábla</button>
+            <button onclick="filterCategory('kasszaszalag')"><i class="ph-bold ph-receipt"></i>
+                Pénztárgépszalagok</button>
+            <button onclick="filterCategory('taska')"><i class="ph-bold ph-shopping-bag"></i> Nylon táska, Ingvállas
+                táskák</button>
+            <button onclick="filterCategory('irodaszer')"><i class="ph-bold ph-paperclip"></i> Irodaszerek,
+                Kábelkötegelők</button>
+            <button onclick="filterCategory('kosar')"><i class="ph-bold ph-shopping-cart"></i> Bevásáló Kosár</button>
         </div>
     </main>
 
@@ -76,7 +92,7 @@
 
     <!-- Footer decoration or info could go here -->
 
-    <script src="script.js?v=12"></script>
+    <script src="script.js?v=27"></script>
 </body>
 
 </html>

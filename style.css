@@ -1,55 +1,135 @@
 /* --- VISUALSTOCK NEON EDITION --- */
 
+/* --- PALETTE: Midnight Premium --- */
 :root {
-    /* --- PALETTE: Cyberpunk/Neon (Brightened) --- */
-    --bg-dark: #0f172a;
-    /* Világosabb mélykék (Slate 900) */
-    --card-bg: #243045;
-    /* Még világosabb kártyák (Láthatóbb) */
-    --card-hover: #303e58;
-    /* Hover állapot */
+    --bg-dark: #050510;
+    --card-bg: rgba(15, 23, 42, 0.6);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --card-hover: rgba(30, 41, 59, 0.8);
 
-    /* Neon Accents */
-    --neon-cyan: #22d3ee;
-    /* Világosabb cián */
-    --neon-magenta: #e879f9;
-    /* Lágyabb lila */
-    --neon-blue: #60a5fa;
-    /* Világosabb kék */
-    --neon-purple: #a855f7;
+    /* Premium Neon Accents (Strict Professional Cyberpunk) */
+    --neon-cyan: #00f3ff;
+    /* Core Cyber Cyan */
+    --neon-blue: #3b82f6;
+    /* Modern Deep Blue */
+    --neon-indigo: #6366f1;
+    /* Deep Indigo (Magenta helyett) */
+    --neon-purple: #818cf8;
+    /* Soft Purple-Blue */
+    --neon-emerald: #10b981;
+    /* Professional Success */
+
+    /* Generic Accents */
+    --accent-primary: var(--neon-cyan);
+    --accent-secondary: var(--neon-blue);
+    --accent-gradient: linear-gradient(135deg, var(--neon-blue), var(--neon-indigo));
+    --accent-glow: rgba(0, 243, 255, 0.2);
 
     /* Text */
     --text-main: #f8fafc;
-    /* Hófehér */
     --text-muted: #94a3b8;
-    /* Világosabb szürke */
 
-    /* --- RESTRICTED STOCK COLORS (TRAFFIC LIGHT) --- */
-    /* Only for stock indicators! */
-    --stock-green: #4ade80;
-    /* Élénkebb zöld */
-    --stock-yellow: #facc15;
-    /* Élénkebb sárga */
-    --stock-red: #f87171;
-    /* Lágyabb piros */
+    /* Stock Colors (Strictly kept for functionality) */
+    --stock-green: #10b981;
+    --stock-yellow: #f59e0b;
+    --stock-red: #ef4444;
 
-    /* Dimensions */
-    --header-height: 80px;
-    --border-radius: 16px;
-    /* Kicsit kerekebb */
+    --border-radius: 20px;
+    --glass-blur: 15px;
 }
 
 body {
     font-family: 'Outfit', sans-serif;
     background-color: var(--bg-dark);
-    /* Subtle gradient to add light */
-    background-image:
-        radial-gradient(circle at top center, rgba(34, 211, 238, 0.08), transparent 40%);
     color: var(--text-main);
     margin: 0;
     padding: 0;
     padding-bottom: 80px;
     overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* --- CYBER BACKGROUND --- */
+.bg-blobs {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 50%, #0a0a1f 0%, #050510 100%);
+}
+
+/* Cyber Grid Effect */
+.bg-blobs::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: center center;
+    pointer-events: none;
+}
+
+/* Grainy Texture */
+.bg-blobs::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.04;
+    pointer-events: none;
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    animation: float 20s infinite alternate;
+}
+
+.blob-1 {
+    width: 400px;
+    height: 400px;
+    background: rgba(16, 185, 129, 0.2);
+    top: -100px;
+    right: -100px;
+}
+
+.blob-2 {
+    width: 300px;
+    height: 300px;
+    background: rgba(6, 182, 212, 0.2);
+    bottom: -50px;
+    left: -50px;
+    animation-delay: -5s;
+}
+
+.blob-3 {
+    width: 250px;
+    height: 250px;
+    background: rgba(99, 102, 241, 0.15);
+    top: 40%;
+    left: 20%;
+    animation-duration: 25s;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(100px, 50px) scale(1.1);
+    }
 }
 
 /* Background Ambient Glow REMOVED/UPDATED in body */
@@ -119,11 +199,11 @@ header {
 }
 
 .btn-minus:hover {
-    background-color: rgba(232, 121, 249, 0.15);
-    /* Soft Magenta tint */
-    border-color: var(--neon-magenta);
-    color: var(--neon-magenta);
-    box-shadow: 0 0 10px rgba(232, 121, 249, 0.3);
+    background-color: rgba(77, 77, 255, 0.15);
+    /* Soft Blue tint */
+    border-color: var(--neon-blue);
+    color: var(--neon-blue);
+    box-shadow: 0 0 10px rgba(77, 77, 255, 0.3);
 }
 
 .brand .subtitle {
@@ -133,7 +213,7 @@ header {
 }
 
 .brand .divider {
-    color: var(--neon-magenta);
+    color: var(--neon-cyan);
     font-weight: bold;
     margin: 0 5px;
 }
@@ -264,12 +344,12 @@ header {
 
 #searchInput:focus {
     outline: none;
-    border-color: var(--neon-magenta);
-    box-shadow: 0 0 10px rgba(189, 0, 255, 0.2);
+    border-color: var(--neon-indigo);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
 }
 
 #searchInput:focus+.search-icon {
-    color: var(--neon-magenta);
+    color: var(--neon-indigo);
 }
 
 /* Filter Buttons */
@@ -316,35 +396,130 @@ header {
 
 /* --- GRID & CARDS --- */
 .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
+    padding: 20px;
 }
 
-.card {
-    background-color: var(--card-bg);
+/* --- CARD FLIP SYSTEM --- */
+.card-container {
+    perspective: 1000px;
+    height: 300px;
+    /* Increased height to 300px to fit images */
+    cursor: pointer;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+.card-container.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
     border-radius: var(--border-radius);
-    padding: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    background: var(--card-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--card-border);
+    padding: 24px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 180px;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    background-color: var(--card-hover);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4),
-        0 0 15px rgba(77, 77, 255, 0.1);
-    /* Subtle neon glow */
-    border-color: rgba(77, 77, 255, 0.3);
+.card-back {
+    transform: rotateY(180deg);
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+    border: 1px solid rgba(0, 243, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    min-width: 0;
+    /* Stabilize flex width */
+}
+
+.back-content-left {
+    flex: 0 0 40%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(15, 23, 42, 0.4);
+    position: relative;
+    z-index: 2;
+}
+
+.back-content-right {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+
+/* Dot Matrix Pattern on Back */
+.card-back::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(rgba(0, 243, 255, 0.1) 1px, transparent 1px);
+    background-size: 15px 15px;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Back Glow */
+.card-back::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(0, 243, 255, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.card-container:hover .card-inner {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
+}
+
+.card-container:hover .card-front {
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.card {
+    /* Legacy override if applied */
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
 }
 
 /* Card Header */
@@ -481,22 +656,21 @@ header {
     color: white;
 }
 
-/* Minus Button - Active/Visible */
-/* Minus Button - NEON MAGENTA (Visible) */
+/* Minus Button - NEON BLUE/INDIGO (Visible & Neutral) */
 .btn-minus {
-    background-color: rgba(232, 121, 249, 0.1);
+    background-color: rgba(77, 77, 255, 0.1);
     /* Visible base color */
-    border: 1px solid var(--neon-magenta);
+    border: 1px solid var(--neon-blue);
     /* Neon border */
-    color: var(--neon-magenta);
+    color: var(--neon-blue);
     /* Neon icon */
-    box-shadow: 0 0 8px rgba(232, 121, 249, 0.2);
+    box-shadow: 0 0 8px rgba(77, 77, 255, 0.2);
 }
 
 .btn-minus:hover {
-    background-color: var(--neon-magenta);
+    background-color: var(--neon-blue);
     color: white;
-    box-shadow: 0 0 15px rgba(232, 121, 249, 0.6);
+    box-shadow: 0 0 15px rgba(77, 77, 255, 0.6);
     transform: scale(1.1);
 }
 
@@ -509,6 +683,140 @@ header {
 .btn-plus:hover {
     transform: scale(1.1);
     box-shadow: 0 6px 15px rgba(77, 77, 255, 0.5);
+}
+
+/* --- CARD BACK CONTENT --- */
+.back-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    /* Reduced from 20px */
+}
+
+.back-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    /* Reduced from 12px */
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    /* Reduced from 4px */
+}
+
+.detail-item .label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.detail-item .value {
+    font-size: 1rem;
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+/* --- PRODUCT IMAGE STYLES (Updated for Side-by-Side) --- */
+.product-image-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.product-image {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.3));
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+    /* Made visible by default */
+}
+
+.card-inner:hover .product-image {
+    transform: scale(1.08) rotate(2deg);
+}
+
+.image-glow-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    background: radial-gradient(circle, rgba(0, 243, 255, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+
+
+/* --- ENTRANCE ANIMATION --- */
+.card-container {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: cardEntrance 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes cardEntrance {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- HEADER REFINEMENT --- */
+header {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-bottom: 1px solid var(--card-border);
+}
+
+.badge-kulcssoft {
+    background: rgba(16, 185, 129, 0.1);
+    padding: 6px 12px;
+    border-radius: 50px;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* --- BUTTON REFINEMENT --- */
+.category-buttons button.active-btn {
+    background: var(--accent-gradient);
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+#searchInput {
+    background-color: rgba(30, 41, 59, 0.5);
+    border-color: var(--card-border);
+}
+
+#searchInput:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+/* --- PROGRESS BAR REFINEMENT --- */
+.progress-fill.stock-high {
+    background: linear-gradient(90deg, #059669, #10b981);
+}
+
+.progress-fill.stock-med {
+    background: linear-gradient(90deg, #d97706, #fbbf24);
+}
+
+.progress-fill.stock-low {
+    background: linear-gradient(90deg, #dc2626, #ef4444);
 }
 
 /* Animations */
@@ -549,6 +857,40 @@ header {
 
     .category-buttons button {
         flex: 0 0 auto;
+    }
+
+    .card-container {
+        height: 270px;
+        /* Increased from 200px to avoid content shift */
+    }
+
+    .card-front,
+    .card-back {
+        padding: 15px;
+    }
+
+    .card-back {
+        padding: 0;
+        /* Keep 0 for internal split */
+    }
+
+    .back-content-left {
+        padding: 12px;
+        flex: 0 0 45%;
+        /* Slightly wider left side for Hungarian text */
+    }
+
+    .termek-nev {
+        font-size: 0.95rem;
+        /* Smaller font on mobile */
+    }
+
+    .current-qty {
+        font-size: 1.6rem;
+    }
+
+    .detail-item .value {
+        font-size: 0.85rem;
     }
 }
 

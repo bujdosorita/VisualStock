@@ -33,7 +33,8 @@ if ($method == 'GET') {
                 "cikkszam" => $row['cikkszam'],
                 "nev" => $row['nev'],
                 "db" => $row['db'],
-                "max" => $row['max_keszlet']
+                "max" => $row['max_keszlet'],
+                "kep" => isset($row['kep']) ? $row['kep'] : null
             );
         }
     }

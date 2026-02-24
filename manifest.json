@@ -1,8 +1,8 @@
 {
-  "id": "/visualstock-final/",
+  "id": "/VisualStock/",
   "name": "VisualStock Premium",
   "short_name": "VisualStock",
-  "start_url": "./index.html?version=uj",
+  "start_url": "/VisualStock/index.html",
   "display": "standalone",
   "background_color": "#050510",
   "theme_color": "#050510",
