@@ -11,14 +11,12 @@ A **VisualStock** egy modern, **Neon/Cyberpunk** stílusú raktárkészlet-kezel
 
 ## ✨ Kiemelt Funkciók
 
-- **🎨 Modern Felület**: Látványos sötét téma neon cián/lila színekkel és üveghatású (glassmorphism) elemekkel.
-- **⚡ Gyors Keresés**: Azonnali szűrés név vagy cikkszám alapján.
-- **📱 PWA (App) Mód**: Telepíthető eszközre, így natív alkalmazásként viselkedik (ikon az asztalon, teljes képernyős mód).
-- **🚦 Intelligens Készletjelző**:
-  - 🟢 **Zöld**: Bőséges készlet (>40%)
-  - 🟡 **Sárga**: Fogyóban (<40%)
-  - 🔴 **Piros**: Kritikus / Hiánycikk (<20%)
-- **🔄 Adatszinkronizáció**: Szimulált kapcsolat külső rendszerekkel (pl. Kulcs-Soft).
+- **🎨 Premium Cyberpunk Felület**: Látványos sötét téma neon cián/lila színekkel, üveghatású (glassmorphism) elemekkel és Cyber-Grid háttérrel.
+- **🖼️ Okos Termékfotók**: 100% megbízható automatikus képkeresés a `vallfa.hu` szerverén (ID: 41068). Ha van fotó a webshopban, a VisualStock megtalálja!
+- **🔄 Auto-Flip Rendszer**: A kártyák 5 másodperc után automatikusan visszafordulnak, így a kijelző mindig naprakész és tiszta marad.
+- **⚡ Intelligens Készletjelző**: Szigorú színkódolás (Zöld/Sárga/Piros) a készletszintek azonnali áttekintéséhez.
+- **📱 Mobil-Optimalizált**: Tökéletes megjelenés asztali gépen és mobilon egyaránt, kifinomult kártya-elrendezéssel.
+- **🏃 PWA (App) Mód**: Telepíthető eszközre, natív alkalmazásként használható (ikon az asztalon, teljes képernyős mód).
 
 ---
 
