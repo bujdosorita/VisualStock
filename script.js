@@ -128,17 +128,17 @@ function filterCategory(kod, clear = true) {
     const szurt = termekek.filter(t => {
         const n = t.nev.toLowerCase();
         if (kod === 'sztender') return n.includes('sztender') || n.includes('állvány');
-        if (kod === 'vallfa') return (n.includes('vállfa') || n.includes('méretjelölő') || n.includes('méretjelző') || n.includes('csipesz') || n.includes('divider')) && !n.includes('leszedő');
+        if (kod === 'vallfa') return (n.includes('vállfa') || n.includes('méretjelölő') || n.includes('méretjelző') || n.includes('csipesz') || n.includes('divider') || n.includes('fa') || n.includes('műanyag') || n.includes('fém')) && !n.includes('leszedő');
         if (kod === 'cimkezo') return n.includes('belövő') || n.includes('szál') || n.includes('körszál') || (n.includes('címke') && n.includes('függő')) || (n.includes('etikett') && n.includes('függő')) || n.includes('pisztoly');
-        if (kod === 'vonalcimke') return (n.includes('vonalkód') || n.includes('körcímke')) || (n.includes('etikett') && !n.includes('függő') && !n.includes('polc') && !n.includes('karton'));
+        if (kod === 'vonalcimke') return (n.includes('vonalkód') || n.includes('körcímke') || n.includes('tekercs') || n.includes('mérlegcímke')) || (n.includes('etikett') && !n.includes('függő') && !n.includes('polc') && !n.includes('karton') && !n.includes('a4'));
         if (kod === 'arazogep') return n.includes('árazó') || n.includes('festékhenger');
         if (kod === 'ruhazsak') return n.includes('ruhazsák') || n.includes('öltönyzsák') || n.includes('ruhafólia') || (n.includes('fólia') && n.includes('sztender'));
         if (kod === 'polccimke') return n.includes('ársín') || n.includes('polccímke') || n.includes('kartoncímke');
         if (kod === 'plexitok') return n.includes('laptok') || n.includes('tábla') || n.includes('plexi');
-        if (kod === 'kasszaszalag') return n.includes('pénztárgépszalag') || n.includes('hőpapír') || n.includes('bankterminál') || n.includes('repont') || n.includes('envipco') || n.includes('mérlegcímke');
+        if (kod === 'kasszaszalag') return (n.includes('pénztárgépszalag') || n.includes('hőpapír') || n.includes('bankterminál') || n.includes('repont') || n.includes('envipco')) && !n.includes('mérlegcímke');
         if (kod === 'taska') return n.includes('táska') || n.includes('tasak') || n.includes('zacskó');
         if (kod === 'irodaszer') {
-            const irodaSzavak = ['toll', 'marker', 'boríték', 'genotherm', 'gyorsfűző', 'spirálfüzet', 'radír', 'ragasztó', 'tűzőkapocs', 'nyomtatvány', 'kábelkötegelő', 'papír', 'marker', 'cellux'];
+            const irodaSzavak = ['toll', 'marker', 'boríték', 'genotherm', 'gyorsfűző', 'spirálfüzet', 'radír', 'ragasztó', 'tűzőkapocs', 'nyomtatvány', 'kábelkötegelő', 'papír', 'marker', 'cellux', 'victoria', 'a4'];
             return irodaSzavak.some(szo => n.includes(szo)) && !n.includes('pénztár') && !n.includes('hőpapír');
         }
         if (kod === 'kosar') return n.includes('kosár');
@@ -248,7 +248,6 @@ function fullRender(adatok) {
                                 <div class="detail-item"><span class="label">MAX</span><span class="value">${t.max} db</span></div>
                                 <div class="detail-item"><span class="label">KATEGÓRIA</span><span class="value">${aktualisSzuro === 'all' ? 'Összes' : document.querySelector('.category-buttons button.active-btn')?.innerText.trim() || 'Egyéb'}</span></div>
                             </div>
-                            <div class="back-footer" style="margin-top:auto; padding-top:10px; border-top:1px solid rgba(255,255,255,0.05); font-size:0.75rem;"><i class="ph-fill ph-check-circle"></i> Sync: 5s</div>
                         </div>
                         <div class="back-content-right">
                             <div class="image-glow-overlay"></div>
