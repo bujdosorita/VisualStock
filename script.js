@@ -79,6 +79,8 @@ function loadDemoData() {
 function handleUpdate(ujAdatok) {
     if (JSON.stringify(ujAdatok) !== JSON.stringify(termekek)) {
         termekek = ujAdatok;
+        
+        // Reapply current filters WITHOUT resetting the layout if possible
         if (searchInput.value.length > 0) {
             filterStock();
         } else if (aktualisSzuro !== 'all') {
@@ -96,7 +98,15 @@ async function modifyStock(cikkszam, valtozas) {
 
     const ujKeszlet = Math.max(0, termekek[termekIndex].db + valtozas);
     termekek[termekIndex].db = ujKeszlet;
-    renderVisualStock(termekek);
+    
+    // Instead of forcing a full render (which breaks categories), trigger an update check
+    if (searchInput.value.length > 0) {
+        filterStock();
+    } else if (aktualisSzuro !== 'all') {
+        filterCategory(aktualisSzuro, false);
+    } else {
+        renderVisualStock(termekek);
+    }
 
     try {
         const { error } = await supabaseClient

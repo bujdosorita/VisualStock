@@ -1,7 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-  <rect width="256" height="256" fill="#050510"/>
-  
-  <g transform="translate(38, 38) scale(0.7)">
-    <path fill="#00f3ff" d="M223.68,66.15l-88-48.18a15.92,15.92,0,0,0-15.36,0l-88,48.18A15.86,15.86,0,0,0,24,80.18v95.64a15.86,15.86,0,0,0,8.32,14l88,48.18a15.92,15.92,0,0,0,15.36,0l88-48.18a15.86,15.86,0,0,0,8.32-14V80.18A15.86,15.86,0,0,0,223.68,66.15ZM128,120,47.65,76,128,32l80.35,44ZM40,90.47l80,43.78v81.28L40,171.75Zm96,125.06V134.25l80-43.78v81.28Z"/>
+  <rect width="256" height="256" fill="#050510" rx="40" ry="40"/>
+  <defs>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  <g filter="url(#glow)">
+    <!-- Top Face -->
+    <path d="M 128 30 L 208 76 L 128 122 L 48 76 Z" fill="none" stroke="#00f3ff" stroke-width="20" stroke-linejoin="round"/>
+    
+    <!-- Right Face -->
+    <path d="M 134 134 L 214 88 L 214 180 L 134 226 Z" fill="none" stroke="#00f3ff" stroke-width="20" stroke-linejoin="round"/>
+    
+    <!-- Left Face -->
+    <path d="M 122 134 L 42 88 L 42 180 L 122 226 Z" fill="none" stroke="#00f3ff" stroke-width="20" stroke-linejoin="round"/>
+  </g>
+  <g>
+    <!-- Crisp Foreground Overlay to punch through the blur -->
+    <path d="M 128 30 L 208 76 L 128 122 L 48 76 Z" fill="none" stroke="#00f3ff" stroke-width="20" stroke-linejoin="round"/>
+    <path d="M 134 134 L 214 88 L 214 180 L 134 226 Z" fill="none" stroke="#00f3ff" stroke-width="20" stroke-linejoin="round"/>
+    <path d="M 122 134 L 42 88 L 42 180 L 122 226 Z" fill="none" stroke="#00f3ff" stroke-width="20" stroke-linejoin="round"/>
   </g>
 </svg>
