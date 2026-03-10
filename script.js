@@ -219,6 +219,7 @@ function handleImageFallback(img) {
         const attempt = parseInt(img.getAttribute('data-attempt') || '0');
 
         const patterns = [
+            `https://vallfa.hu/img/41068/${sku}/560x560,r/${sku}.jpg`,
             `https://vallfa.hu/img/41068/${sku}/500x500/${sku}.jpg`,
             `https://vallfa.hu/shop_ordered/41068/shop_altkep/${sku}.jpg`,
             `https://vallfa.hu/shop_ordered/41068/shop_altkep/${sku}_altkep_1.jpg`,
@@ -240,15 +241,23 @@ function handleImageFallback(img) {
 function getProductImage(cikkszam, name, kep) {
     if (kep) return kep;
     
-    // Alapértelmezett kiegészítő kivételek és egyedi kódok
-    if (cikkszam === '601056') return 'https://vallfa.hu/img/41068/601045/500x500/601045.jpg'; 
-    if (cikkszam === '601045TRUD') return 'https://vallfa.hu/img/41068/601045/500x500/601045.jpg';
-    if (cikkszam === '601047TFEKEZ') return 'https://vallfa.hu/img/41068/6010475FEK/500x500/6010475FEK.jpg';
-    if (cikkszam === '601047SONG160') return 'https://vallfa.hu/img/41068/601047/500x500/601047.jpg';
-    if (cikkszam === '6010414FT') return 'https://vallfa.hu/img/41068/601041FT/500x500/601041FT.jpg';
-    if (cikkszam === '6010395FT') return 'https://vallfa.hu/img/41068/601039FT/500x500/601039FT.jpg';
-    if (cikkszam === '6010406FT') return 'https://vallfa.hu/img/41068/601040FT/500x500/601040FT.jpg';
-    if (cikkszam === '503590' || cikkszam === '503594') return 'https://vallfa.hu/img/41068/503562/500x500/503562.jpg'; 
+    // Új 560x560,r fájlok szerinti explicit leképezések a Vallfa szervere alapján
+    if (cikkszam === '601056') return 'https://vallfa.hu/img/41068/601045T/560x560,r/601045T.jpg'; 
+    if (cikkszam === '601045TRUD') return 'https://vallfa.hu/img/41068/601045T/560x560,r/601045T.jpg';
+    if (cikkszam === '601047TFEKEZ') return 'https://vallfa.hu/img/41068/601047TFEKEZ/560x560,r/601047TFEKEZ.jpg';
+    if (cikkszam === '601047SONG160') return 'https://vallfa.hu/img/41068/601047SONG160/560x560,r/601047SONG160.jpg';
+    if (cikkszam === '6010414FT') return 'https://vallfa.hu/img/41068/6010414FT/560x560,r/6010414FT.jpg';
+    if (cikkszam === '6010395FT') return 'https://vallfa.hu/img/41068/6010395FT/560x560,r/6010395FT.jpg';
+    if (cikkszam === '6010406FT') return 'https://vallfa.hu/img/41068/6010406FT/560x560,r/6010406FT.jpg';
+    
+    // Árazók és kifutott cikkek amik mostanában változtak
+    if (cikkszam === '8852660') return 'https://vallfa.hu/shop_ordered/41068/shop_altkep/8852660.jpg'; // Meto henger
+    if (cikkszam === '25x16K') return 'https://vallfa.hu/shop_ordered/41068/shop_altkep/25x16k.jpg';
+    if (cikkszam === '22x12K') return 'https://vallfa.hu/shop_ordered/41068/shop_altkep/22x12K.jpg';
+    if (cikkszam === '122SZT') return 'https://vallfa.hu/shop_ordered/41068/shop_altkep/122szt.jpg';
+    if (cikkszam === '150064') return 'https://vallfa.hu/img/41068/150064/560x560,r/150064.jpg'; // Vállfaleszedő
+
+    if (cikkszam === '503590' || cikkszam === '503594') return 'https://vallfa.hu/img/41068/503590/560x560,r/503590.jpg'; 
     
     // Méretjelzők és egyéb kiegészítők (a Vallfa néha shop_ordered mappába teszi a fotót)
     if (cikkszam === '900132') return 'https://vallfa.hu/shop_ordered/41068/shop_altkep/900132.jpg';
@@ -257,9 +266,9 @@ function getProductImage(cikkszam, name, kep) {
     if (cikkszam === '601070') return 'https://vallfa.hu/shop_ordered/41068/shop_altkep/601070.jpg';
     if (cikkszam === '601070R') return 'https://vallfa.hu/shop_ordered/41068/shop_altkep/601070.jpg';
     
-    // Visszaállítás az eredeti biztonságos logikára: ne vágjuk le a betűket, csak hagyjuk a teljes cikkszámot
+    // Visszaállítás az eredeti biztonságos logikára az új felbontással:
     if (cikkszam && (cikkszam.match(/^[a-zA-Z0-9-]+$/))) {
-        return `https://vallfa.hu/img/41068/${cikkszam}/500x500/${cikkszam}.jpg`;
+        return `https://vallfa.hu/img/41068/${cikkszam}/560x560,r/${cikkszam}.jpg`;
     }
     
     return `https://via.placeholder.com/400/0f172a/00f3ff?text=${encodeURIComponent(name || 'VisualStock')}`;
