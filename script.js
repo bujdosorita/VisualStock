@@ -147,6 +147,29 @@ function filterStock() {
     renderVisualStock(szurt);
 }
 
+function getTermekCategory(t) {
+    const n = t.nev.toLowerCase();
+    
+    // Szigorú fentről lefelé szabály (waterfall), így ami egyszer besorolást nyer, nem megy tovább, kiküszöbölve a duplikációkat
+    if ((n.includes('laptok') || n.includes('tábla') || n.includes('plexi') || n.includes('árcímketartó')) && !n.includes('felíró')) return 'plexitok';
+    if (n.includes('ruhazsák') || n.includes('öltönyzsák') || n.includes('ruhafólia') || (n.includes('fólia') && n.includes('sztender'))) return 'ruhazsak';
+    if (n.includes('sztender') || n.includes('állvány')) return 'sztender';
+    if (n.includes('ársín') || n.includes('polccímke') || n.includes('kartoncímke')) return 'polccimke';
+    if ((n.includes('pénztárgépszalag') || n.includes('hőpapír') || n.includes('bankterminál') || n.includes('repont') || n.includes('envipco') || n.includes('kasszaszalag')) && !n.includes('mérlegcímke')) return 'kasszaszalag';
+    if ((n.includes('vonalkód') || n.includes('körcímke') || n.includes('tekercs') || n.includes('mérlegcímke') || n.includes('etikett') || n.includes('festékszalag') || n.includes('stanc')) && !n.includes('függő')) return 'vonalcimke';
+    if (n.includes('belövő') || n.includes('szál') && !n.includes('árazószalag') && !n.includes('pénztárgépszalag') && !n.includes('kasszaszalag') && !n.includes('zárószalag') && !n.includes('csomagoló') || n.includes('körszál') || (n.includes('címke') && n.includes('függő')) || (n.includes('etikett') && n.includes('függő')) || n.includes('pisztoly')) return 'cimkezo';
+    if (n.includes('árazó') || n.includes('festékhenger')) return 'arazogep';
+    if (n.includes('táska') || n.includes('tasak') || n.includes('zacskó') || n.includes('szemeteszsák') || n.includes('szatyor')) return 'taska';
+    if (n.includes('kosár')) return 'kosar';
+    if (n.includes('vállfa') || n.includes('méretjelölő') || n.includes('méretjelző') || n.includes('csipesz') || n.includes('divider') || n.includes('leszedő')) return 'vallfa';
+    
+    // Irodaszer az összes többi után jön, így az "A4" nem viszi ide a laptokot, a "ragasztó" pedig az ársínt
+    const irodaSzavak = ['toll', 'marker', 'boríték', 'genotherm', 'gyorsfűző', 'spirálfüzet', 'radír', 'ragasztó', 'tűzőkapocs', 'nyomtatvány', 'kábelkötegelő', 'papír', 'cellux', 'victoria', 'a4', 'apli', 'csomagolószalag', 'felírótábla'];
+    if (irodaSzavak.some(szo => n.includes(szo))) return 'irodaszer';
+    
+    return 'egyeb';
+}
+
 function filterCategory(kod, clear = true) {
     aktualisSzuro = kod;
     if (clear) {
@@ -160,25 +183,7 @@ function filterCategory(kod, clear = true) {
     }
     if (kod === 'all') { renderVisualStock(termekek); return; }
 
-    const szurt = termekek.filter(t => {
-        const n = t.nev.toLowerCase();
-        if (kod === 'sztender') return n.includes('sztender') || n.includes('állvány');
-        if (kod === 'vallfa') return (n.includes('vállfa') || n.includes('méretjelölő') || n.includes('méretjelző') || n.includes('csipesz') || n.includes('divider') || n.includes('fa') || n.includes('műanyag') || n.includes('fém')) && !n.includes('leszedő');
-        if (kod === 'cimkezo') return n.includes('belövő') || n.includes('szál') || n.includes('körszál') || (n.includes('címke') && n.includes('függő')) || (n.includes('etikett') && n.includes('függő')) || n.includes('pisztoly');
-        if (kod === 'vonalcimke') return (n.includes('vonalkód') || n.includes('körcímke') || n.includes('tekercs') || n.includes('mérlegcímke')) || (n.includes('etikett') && !n.includes('függő') && !n.includes('polc') && !n.includes('karton') && !n.includes('a4'));
-        if (kod === 'arazogep') return n.includes('árazó') || n.includes('festékhenger');
-        if (kod === 'ruhazsak') return n.includes('ruhazsák') || n.includes('öltönyzsák') || n.includes('ruhafólia') || (n.includes('fólia') && n.includes('sztender'));
-        if (kod === 'polccimke') return n.includes('ársín') || n.includes('polccímke') || n.includes('kartoncímke');
-        if (kod === 'plexitok') return n.includes('laptok') || n.includes('tábla') || n.includes('plexi');
-        if (kod === 'kasszaszalag') return (n.includes('pénztárgépszalag') || n.includes('hőpapír') || n.includes('bankterminál') || n.includes('repont') || n.includes('envipco')) && !n.includes('mérlegcímke');
-        if (kod === 'taska') return n.includes('táska') || n.includes('tasak') || n.includes('zacskó');
-        if (kod === 'irodaszer') {
-            const irodaSzavak = ['toll', 'marker', 'boríték', 'genotherm', 'gyorsfűző', 'spirálfüzet', 'radír', 'ragasztó', 'tűzőkapocs', 'nyomtatvány', 'kábelkötegelő', 'papír', 'marker', 'cellux', 'victoria', 'a4'];
-            return irodaSzavak.some(szo => n.includes(szo)) && !n.includes('pénztár') && !n.includes('hőpapír');
-        }
-        if (kod === 'kosar') return n.includes('kosár');
-        return false;
-    });
+    const szurt = termekek.filter(t => getTermekCategory(t) === kod);
     renderVisualStock(szurt);
 }
 
@@ -231,15 +236,22 @@ function handleImageError(img) {
 function getProductImage(cikkszam, name, kep) {
     if (kep) return kep;
     
-    // Alapértelmezett kiegészítő kivételek
-    if (cikkszam === '601056') return 'https://vallfa.hu/img/41068/601045/500x500/601045.jpg'; // Helyettesítő
+    // Alapértelmezett kiegészítő kivételek és egyedi kódok
+    if (cikkszam === '601056') return 'https://vallfa.hu/img/41068/601045/500x500/601045.jpg'; 
     if (cikkszam === '601045TRUD') return 'https://vallfa.hu/img/41068/601045/500x500/601045.jpg';
     if (cikkszam === '601047TFEKEZ') return 'https://vallfa.hu/img/41068/6010475FEK/500x500/6010475FEK.jpg';
     if (cikkszam === '601047SONG160') return 'https://vallfa.hu/img/41068/601047/500x500/601047.jpg';
     if (cikkszam === '6010414FT') return 'https://vallfa.hu/img/41068/601041FT/500x500/601041FT.jpg';
     if (cikkszam === '6010395FT') return 'https://vallfa.hu/img/41068/601039FT/500x500/601039FT.jpg';
     if (cikkszam === '6010406FT') return 'https://vallfa.hu/img/41068/601040FT/500x500/601040FT.jpg';
-    if (cikkszam === '503590' || cikkszam === '503594') return 'https://vallfa.hu/img/41068/503562/500x500/503562.jpg'; // Fólia fallback
+    if (cikkszam === '503590' || cikkszam === '503594') return 'https://vallfa.hu/img/41068/503562/500x500/503562.jpg'; 
+    
+    // Méretjelzők és egyéb kiegészítők (a Vallfa néha shop_ordered mappába teszi a fotót)
+    if (cikkszam === '900132') return 'https://vallfa.hu/shop_ordered/41068/shop_altkep/900132.jpg';
+    if (cikkszam === '900133') return 'https://vallfa.hu/shop_ordered/41068/shop_altkep/900133.jpg';
+    if (cikkszam === '900152') return 'https://vallfa.hu/shop_ordered/41068/shop_altkep/900152.jpg';
+    if (cikkszam === '601070') return 'https://vallfa.hu/shop_ordered/41068/shop_altkep/601070.jpg';
+    if (cikkszam === '601070R') return 'https://vallfa.hu/shop_ordered/41068/shop_altkep/601070.jpg';
     
     // Visszaállítás az eredeti biztonságos logikára: ne vágjuk le a betűket, csak hagyjuk a teljes cikkszámot
     if (cikkszam && (cikkszam.match(/^[a-zA-Z0-9-]+$/))) {
