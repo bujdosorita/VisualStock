@@ -31,20 +31,27 @@ A projekt a következő technológiákra épül:
 
 ---
 
-## 🚀 Telepítés és Használat
+## 🚀 Telepítés és Futtatás
 
-A program működéséhez **webszerverre** van szükség (mivel PHP alapú Backend szolgálja ki az adatokat).
+Mivel az alkalmazás most már **Supabase** backendet használ, nincs szükség helyi PHP szerverre (pl. XAMPP).
 
-### 1️⃣ Webszerver beállítása (Ajánlott)
-Ha van **XAMPP** vagy **WAMP** telepítve:
-1. Másold a projekt mappáját a `htdocs` mappába (pl. `C:\xampp\htdocs\VisualStock`).
-2. Indítsd el az Apache és MySQL modulokat.
-3. Importáld a `visualstock.sql` fájlt phpMyAdmin-ban.
-4. Nyisd meg a böngészőben: `http://localhost/VisualStock`
+1. Klónozd a tárolót.
+2. Nyisd meg az `index.html` fájlt bármilyen böngészőben.
+3. KÉSZ! Az adatok automatikusan töltődnek a felhőből.
 
-### 2️⃣ VS Code "PHP Server" (Fejlesztéshez)
-1. Telepítsd a **PHP Server** kiegészítőt Visual Studio Code-ban.
-2. Jobb klikk az `index.html` fájlon -> **PHP Server: Serve project**.
+## ☁️ Felhő Konfiguráció (Supabase)
+
+A projekt a `script.js` fájl elején található konfigurációval kapcsolódik a Supabase-hez.
+- **Project URL:** Megadva
+- **Anon Key:** Megadva
+- **Tábla:** `termekek`
+
+## 🌐 Netlify Deployment
+
+Az alkalmazás statikus weboldalként hosztolható a Netlify-n:
+1. Töltsd fel a fájlokat egy GitHub repo-ba.
+2. Kapcsold össze a Netlify-vel.
+3. A Netlify automatikusan publikálja az oldalt.
 
 ### 📱 Telepítés Mobilon / Asztali Gépen (PWA)
 Szeretnéd alkalmazásként használni?

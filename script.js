@@ -1,3 +1,20 @@
+// SUPABASE CONFIGURATION
+const SUPABASE_URL = "https://ktmmhgmfzfqbwianrsbx.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_HRcFInsek_3oGvI8TouxjA_xrvq3_5O";
+let supabaseClient;
+
+try {
+    if (typeof supabase === 'undefined') {
+        console.error("Supabase SDK nem töltődött be! Ellenőrizd az internetkapcsolatot vagy böngészőbővítményt (AdBlocker).");
+    } else {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log("Supabase kliens inicializálva.");
+    }
+} catch (e) {
+    console.error("Hiba a Supabase indításakor:", e);
+}
+
+
 const appDiv = document.getElementById('app');
 const searchInput = document.getElementById('searchInput');
 let termekek = [];
@@ -23,31 +40,38 @@ function toggleCard(cardEl) {
 }
 
 async function fetchProducts() {
-    if (Date.now() - utolsoModositas < 4000) return;
+    if (Date.now() - utolsoModositas < 2000) return;
     try {
-        const response = await fetch('api.php');
-        if (!response.ok) throw new Error('Hálózati hiba');
-        const ujAdatok = await response.json();
-        handleUpdate(ujAdatok);
+        const { data, error } = await supabaseClient
+            .from('termekek')
+            .select('*')
+            .order('nev', { ascending: true });
+
+        if (error) throw error;
+
+        // Map common fields if necessary (Postgres column names vs existing JS expectations)
+        const formataltAdatok = data.map(t => ({
+            cikkszam: t.cikkszam,
+            nev: t.nev,
+            db: parseInt(t.db),
+            max: parseInt(t.max_keszlet), // SQL-ben max_keszlet volt a php-ban pedig max ként ment ki
+            kep: t.kep || null
+        }));
+
+        handleUpdate(formataltAdatok);
     } catch (error) {
-        console.warn('API hiba, DEMO mód aktiválása.', error);
-        loadDemoData();
+        console.error('Supabase hiba:', error);
+        // Fallback demo adatokra ha nincs kapcsolat
+        if (termekek.length === 0) loadDemoData();
     }
 }
 
 function loadDemoData() {
+    console.warn("DEMO mód aktiválva.");
     const ujAdatok = [
-        { nev: "100cm Kihúzható Ruhatartó Sztender Ipari Görgővel", cikkszam: "601056", db: 11, max: 20, kep: "https://images.unsplash.com/photo-1540221652346-e5dd6b50f3e7?auto=format&fit=crop&q=80&w=400" },
-        { nev: "122cm Fekete Ipari Ruhatartó Sztender", cikkszam: "6010414FT", db: 5, max: 10, kep: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&q=80&w=400" },
-        { nev: "44cm Csíptetős Ing Fa Vállfa", cikkszam: "402616", db: 1475, max: 1800, kep: "https://images.unsplash.com/photo-1506152983158-b4a74a01c721?auto=format&fit=crop&q=80&w=400" },
-        { nev: "30cm Fehér Gyerek Vállfa Nadrágtartós", cikkszam: "402462", db: 337, max: 500, kep: "https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&q=80&w=400" },
-        { nev: "22x12 Árazószalag FEHÉR", cikkszam: "150060", db: 320, max: 500, kep: "https://images.unsplash.com/photo-1626908013351-800ddd734b40?auto=format&fit=crop&q=80&w=400" },
-        { nev: "80/80/12 75 MÉTER BPA MENTES PÉNZTÁRGÉPSZALAG", cikkszam: "150306", db: 1440, max: 2000, kep: "https://images.unsplash.com/photo-1595079676339-1534801ad6cf?auto=format&fit=crop&q=80&w=400" },
-        { nev: "Standard GP Belövőpisztoly", cikkszam: "104432", db: 140, max: 200, kep: "https://images.unsplash.com/photo-1572044162444-12c4887bc00a?auto=format&fit=crop&q=80&w=400" },
-        { nev: "22L Bevásárló Kosár 2 füles KÉK", cikkszam: "607452", db: 98, max: 200, kep: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=400" },
-        { nev: "Fekete Öltönyzsák 60x110 cm", cikkszam: "503580", db: 103, max: 200, kep: "https://images.unsplash.com/photo-1606134375929-656d02a90432?auto=format&fit=crop&q=80&w=400" },
-        { nev: "L Méretjelölő vállfára", cikkszam: "900005", db: 8, max: 20, kep: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&q=80&w=400" },
-        { nev: "Irodai toll kék", cikkszam: "700001", db: 45, max: 100, kep: "https://images.unsplash.com/photo-1585336139118-121f6920f027?auto=format&fit=crop&q=80&w=400" }
+        { nev: "100cm Kihúzható Ruhatartó Sztender Ipari Görgővel", cikkszam: "601056", db: 11, max: 20 },
+        { nev: "122cm Fekete Ipari Ruhatartó Sztender", cikkszam: "6010414FT", db: 5, max: 10 },
+        { nev: "44cm Csíptetős Ing Fa Vállfa", cikkszam: "402616", db: 1475, max: 1800 }
     ];
     handleUpdate(ujAdatok);
 }
@@ -68,21 +92,23 @@ function handleUpdate(ujAdatok) {
 async function modifyStock(cikkszam, valtozas) {
     utolsoModositas = Date.now();
     const termekIndex = termekek.findIndex(t => t.cikkszam === cikkszam);
-    if (termekIndex !== -1) {
-        termekek[termekIndex].db += valtozas;
-        if (termekek[termekIndex].db < 0) termekek[termekIndex].db = 0;
-        renderVisualStock(termekek);
-    }
+    if (termekIndex === -1) return;
+
+    const ujKeszlet = Math.max(0, termekek[termekIndex].db + valtozas);
+    termekek[termekIndex].db = ujKeszlet;
+    renderVisualStock(termekek);
+
     try {
-        await fetch('api.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ cikkszam: cikkszam, valtozas: valtozas })
-        });
+        const { error } = await supabaseClient
+            .from('termekek')
+            .update({ db: ujKeszlet })
+            .eq('cikkszam', cikkszam);
+
+        if (error) throw error;
     } catch (error) {
         console.error("Hiba mentéskor:", error);
         utolsoModositas = 0;
-        fetchProducts();
+        fetchProducts(); // Hiba esetén szinkronizálunk vissza
     }
 }
 
@@ -124,7 +150,6 @@ function filterCategory(kod, clear = true) {
     }
     if (kod === 'all') { renderVisualStock(termekek); return; }
 
-    // TELJES SZŰRÉSI LOGIKA (Restore and improve)
     const szurt = termekek.filter(t => {
         const n = t.nev.toLowerCase();
         if (kod === 'sztender') return n.includes('sztender') || n.includes('állvány');
@@ -171,21 +196,16 @@ function renderVisualStock(adatok) {
     });
 }
 
-/**
- * Hiba esetén váltogatja a képforrásokat a hivatalos minták között.
- */
 function handleImageError(img) {
     const sku = img.getAttribute('data-sku');
     const name = img.getAttribute('data-name');
     const attempt = parseInt(img.getAttribute('data-attempt') || '0');
 
-    // Hivatalos Unas/Vallfa minták listája - A 41068 a hitelesítve jó ID!
     const patterns = [
         `https://vallfa.hu/img/41068/${sku}/500x500/${sku}.jpg`,
         `https://vallfa.hu/shop_ordered/41068/shop_altkep/${sku}.jpg`,
         `https://vallfa.hu/shop_ordered/41068/shop_altkep/${sku}_altkep_1.jpg`,
         `https://vallfa.hu/shop_ordered/41068/pic/${sku}.jpg`,
-        // Ha semmi sem jön be, jöhet a professzionális márkázott helyőrző
         `https://via.placeholder.com/400/0f172a/00f3ff?text=${encodeURIComponent(name.split(' ')[0] + '\n#' + sku)}`
     ];
 
@@ -193,7 +213,6 @@ function handleImageError(img) {
         img.setAttribute('data-attempt', attempt + 1);
         img.src = patterns[attempt];
     } else {
-        // Ha minden kötél szakad, ne próbálkozzon tovább
         img.onerror = null;
         img.style.opacity = '0.5';
     }
@@ -201,13 +220,9 @@ function handleImageError(img) {
 
 function getProductImage(cikkszam, name, kep) {
     if (kep) return kep;
-
-    // Elsődleges jelölt: a modern Unas minta (ID: 41068)
     if (cikkszam && (cikkszam.match(/^[a-zA-Z0-9-]+$/))) {
         return `https://vallfa.hu/img/41068/${cikkszam}/500x500/${cikkszam}.jpg`;
     }
-
-    // Ha nincs cikkszám, azonnal a professzionális helyőrző
     return `https://via.placeholder.com/400/0f172a/00f3ff?text=${encodeURIComponent(name || 'VisualStock')}`;
 }
 
@@ -220,7 +235,6 @@ function fullRender(adatok) {
         if (sz < 40) { sCl = 'stock-med'; tCl = 'text-yellow'; }
         if (sz < 20 || t.db <= 0) { sCl = 'stock-low'; tCl = 'text-red'; }
 
-        // Pass name for smarter fallback discovery
         const productImage = getProductImage(t.cikkszam, t.nev, t.kep);
 
         html += `
@@ -272,4 +286,4 @@ function fullRender(adatok) {
 fetchProducts();
 setInterval(updateClock, 1000);
 updateClock();
-setInterval(fetchProducts, 5000);
+setInterval(fetchProducts, 8000);
