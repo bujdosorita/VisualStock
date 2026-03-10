@@ -211,25 +211,29 @@ function renderVisualStock(adatok) {
     });
 }
 
-function handleImageError(img) {
-    const sku = img.getAttribute('data-sku');
-    const name = img.getAttribute('data-name');
-    const attempt = parseInt(img.getAttribute('data-attempt') || '0');
+function handleImageFallback(img) {
+    // If the image failed to load OR if it loaded as a 1x1 pixel GIF (Vallfa's fake 404)
+    if (!img.complete || img.naturalWidth <= 1) {
+        const sku = img.getAttribute('data-sku');
+        const name = img.getAttribute('data-name');
+        const attempt = parseInt(img.getAttribute('data-attempt') || '0');
 
-    const patterns = [
-        `https://vallfa.hu/img/41068/${sku}/500x500/${sku}.jpg`,
-        `https://vallfa.hu/shop_ordered/41068/shop_altkep/${sku}.jpg`,
-        `https://vallfa.hu/shop_ordered/41068/shop_altkep/${sku}_altkep_1.jpg`,
-        `https://vallfa.hu/shop_ordered/41068/pic/${sku}.jpg`,
-        `https://via.placeholder.com/400/0f172a/00f3ff?text=${encodeURIComponent(name.split(' ')[0] + '\n#' + sku)}`
-    ];
+        const patterns = [
+            `https://vallfa.hu/img/41068/${sku}/500x500/${sku}.jpg`,
+            `https://vallfa.hu/shop_ordered/41068/shop_altkep/${sku}.jpg`,
+            `https://vallfa.hu/shop_ordered/41068/shop_altkep/${sku}_altkep_1.jpg`,
+            `https://vallfa.hu/shop_ordered/41068/pic/${sku}.jpg`,
+            `https://via.placeholder.com/400/0f172a/00f3ff?text=${encodeURIComponent(name.split(' ')[0] + '\n#' + sku)}`
+        ];
 
-    if (attempt < patterns.length) {
-        img.setAttribute('data-attempt', attempt + 1);
-        img.src = patterns[attempt];
-    } else {
-        img.onerror = null;
-        img.style.opacity = '0.5';
+        if (attempt < patterns.length) {
+            img.setAttribute('data-attempt', attempt + 1);
+            img.src = patterns[attempt];
+        } else {
+            img.onload = null;
+            img.onerror = null;
+            img.style.opacity = '0.5';
+        }
     }
 }
 
@@ -311,7 +315,8 @@ function fullRender(adatok) {
                                      data-sku="${t.cikkszam}"
                                      data-name="${t.nev}"
                                      data-attempt="0"
-                                     onerror="handleImageError(this)"
+                                     onload="handleImageFallback(this)"
+                                     onerror="handleImageFallback(this)"
                                      alt="${t.nev}">
                             </div>
                         </div>
