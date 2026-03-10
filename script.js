@@ -293,6 +293,10 @@ function fullRender(adatok) {
                         <div class="back-content-left">
                             <div class="back-header"><i class="ph-bold ph-info" style="color: var(--neon-cyan);"></i><span>ADATOK</span></div>
                             <div class="back-details">
+                                <div class="detail-item" style="flex-direction: column; align-items: flex-start; gap: 0.3rem;">
+                                    <span class="label">TERMÉK</span>
+                                    <span class="value" style="text-align: left; line-height: 1.3;">${t.nev}</span>
+                                </div>
                                 <div class="detail-item"><span class="label">CIKK</span><span class="value">#${t.cikkszam}</span></div>
                                 <div class="detail-item"><span class="label">MAX</span><span class="value">${t.max} db</span></div>
                                 <div class="detail-item"><span class="label">KATEGÓRIA</span><span class="value">${aktualisSzuro === 'all' ? 'Összes' : document.querySelector('.category-buttons button.active-btn')?.innerText.trim() || 'Egyéb'}</span></div>
