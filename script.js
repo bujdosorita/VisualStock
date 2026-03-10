@@ -230,9 +230,20 @@ function handleImageError(img) {
 
 function getProductImage(cikkszam, name, kep) {
     if (kep) return kep;
-    if (cikkszam && (cikkszam.match(/^[a-zA-Z0-9-]+$/))) {
-        return `https://vallfa.hu/img/41068/${cikkszam}/500x500/${cikkszam}.jpg`;
+    
+    // Alapértelmezett kiegészítő kivételek
+    if (cikkszam === '601045TRUD') return 'https://vallfa.hu/img/41068/601045/500x500/601045.jpg';
+    if (cikkszam === '601047TFEKEZ') return 'https://vallfa.hu/img/41068/6010475FEK/500x500/6010475FEK.jpg';
+    
+    // Ha a cikkszám csak számokból áll, vagy szám+betű kombó, a főkép sokszor az alap szám cikkszám
+    if (cikkszam) {
+        // Ha van benne betű, megpróbáljuk leszedni, hogy az alaptermék képét keressük
+        const baseCikkszamMatch = cikkszam.match(/^(\d+)[a-zA-Z]+(\d*)?$/);
+        const baseCikkszam = baseCikkszamMatch ? (baseCikkszamMatch[1] + (baseCikkszamMatch[2] || '')) : cikkszam;
+        
+        return `https://vallfa.hu/img/41068/${baseCikkszam}/500x500/${baseCikkszam}.jpg`;
     }
+    
     return `https://via.placeholder.com/400/0f172a/00f3ff?text=${encodeURIComponent(name || 'VisualStock')}`;
 }
 
