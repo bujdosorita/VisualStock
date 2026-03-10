@@ -232,8 +232,14 @@ function getProductImage(cikkszam, name, kep) {
     if (kep) return kep;
     
     // Alapértelmezett kiegészítő kivételek
+    if (cikkszam === '601056') return 'https://vallfa.hu/img/41068/601045/500x500/601045.jpg'; // Helyettesítő
     if (cikkszam === '601045TRUD') return 'https://vallfa.hu/img/41068/601045/500x500/601045.jpg';
     if (cikkszam === '601047TFEKEZ') return 'https://vallfa.hu/img/41068/6010475FEK/500x500/6010475FEK.jpg';
+    if (cikkszam === '601047SONG160') return 'https://vallfa.hu/img/41068/601047/500x500/601047.jpg';
+    if (cikkszam === '6010414FT') return 'https://vallfa.hu/img/41068/601041FT/500x500/601041FT.jpg';
+    if (cikkszam === '6010395FT') return 'https://vallfa.hu/img/41068/601039FT/500x500/601039FT.jpg';
+    if (cikkszam === '6010406FT') return 'https://vallfa.hu/img/41068/601040FT/500x500/601040FT.jpg';
+    if (cikkszam === '503590' || cikkszam === '503594') return 'https://vallfa.hu/img/41068/503562/500x500/503562.jpg'; // Fólia fallback
     
     // Ha a cikkszám csak számokból áll, vagy szám+betű kombó, a főkép sokszor az alap szám cikkszám
     if (cikkszam) {
