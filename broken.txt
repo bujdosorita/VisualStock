@@ -1,0 +1,21 @@
+--- BROKEN URLS (GIF RESPONSES) ---
+601056 [100cm Kihúzható Ruhatartó Sztender Ipari Görgővel] -> https://vallfa.hu/img/41068/601045/500x500/601045.jpg
+6010414FT [122cm Fekete Ipari Ruhatartó Sztender] -> https://vallfa.hu/img/41068/601041FT/500x500/601041FT.jpg
+900133 [140 Méretjelző 100/csomag] -> https://vallfa.hu/img/41068/900133/500x500/900133.jpg
+900132 [128 Méretjelző 100/csomag] -> https://vallfa.hu/img/41068/900132/500x500/900132.jpg
+900152 [152 Méretjelző 100/csomag] -> https://vallfa.hu/img/41068/900152/500x500/900152.jpg
+601045TRUD [150cm dupla rúd 150cm kihúzható sztenderhez] -> https://vallfa.hu/img/41068/601045/500x500/601045.jpg
+601047TFEKEZ [150cm Fékezhető Ruha Sztender Klipszes Magasság Állítóval + 5db Vállfa] -> https://vallfa.hu/img/41068/6010475FEK/500x500/6010475FEK.jpg
+6010395FT [152cm Fekete Ipari Ruhatartó Sztender] -> https://vallfa.hu/img/41068/601039FT/500x500/601039FT.jpg
+601047SONG160 [160cm Kihúzható Ruhatartó Sztender Fékezhető Kerekekkel] -> https://vallfa.hu/img/41068/601047/500x500/601047.jpg
+6010406FT [182cm Fekete Ipari Ruhatartó Sztender] -> https://vallfa.hu/img/41068/601040FT/500x500/601040FT.jpg
+1500611 [25 x 16 Árazószalag KÉK] -> https://vallfa.hu/img/41068/1500611/500x500/1500611.jpg
+1500782 [26 x 12 mm Árazószalag PIROS] -> https://vallfa.hu/img/41068/1500782/500x500/1500782.jpg
+60745034LRED [34L Gurulós Piros Bevásárló Kosár Fekete Fogantyúval] -> https://vallfa.hu/img/41068/60745034/500x500/60745034.jpg
+899s [Felírótábla, fa, A4, RAPESCO] -> https://vallfa.hu/img/41068/899/500x500/899.jpg
+150600 [Meto festékhenger 8852660] -> https://vallfa.hu/img/41068/150600/500x500/150600.jpg
+150037P7 [Open P7 Árazógép + 1 Festékhenger] -> https://vallfa.hu/img/41068/1500377/500x500/1500377.jpg
+839 [Ragasztó cellux 12mm Átlátszó] -> https://vallfa.hu/img/41068/839/500x500/839.jpg
+S10 [Stanc költség 1] -> https://vallfa.hu/img/41068/S10/500x500/S10.jpg
+601070 [Teleszkópos Vállfa Leszedő] -> https://vallfa.hu/img/41068/601070/500x500/601070.jpg
+601070R [Vállfa Leszedő Rúd] -> https://vallfa.hu/img/41068/601070/500x500/601070.jpg

@@ -241,13 +241,9 @@ function getProductImage(cikkszam, name, kep) {
     if (cikkszam === '6010406FT') return 'https://vallfa.hu/img/41068/601040FT/500x500/601040FT.jpg';
     if (cikkszam === '503590' || cikkszam === '503594') return 'https://vallfa.hu/img/41068/503562/500x500/503562.jpg'; // Fólia fallback
     
-    // Ha a cikkszám csak számokból áll, vagy szám+betű kombó, a főkép sokszor az alap szám cikkszám
-    if (cikkszam) {
-        // Ha van benne betű, megpróbáljuk leszedni, hogy az alaptermék képét keressük
-        const baseCikkszamMatch = cikkszam.match(/^(\d+)[a-zA-Z]+(\d*)?$/);
-        const baseCikkszam = baseCikkszamMatch ? (baseCikkszamMatch[1] + (baseCikkszamMatch[2] || '')) : cikkszam;
-        
-        return `https://vallfa.hu/img/41068/${baseCikkszam}/500x500/${baseCikkszam}.jpg`;
+    // Visszaállítás az eredeti biztonságos logikára: ne vágjuk le a betűket, csak hagyjuk a teljes cikkszámot
+    if (cikkszam && (cikkszam.match(/^[a-zA-Z0-9-]+$/))) {
+        return `https://vallfa.hu/img/41068/${cikkszam}/500x500/${cikkszam}.jpg`;
     }
     
     return `https://via.placeholder.com/400/0f172a/00f3ff?text=${encodeURIComponent(name || 'VisualStock')}`;
