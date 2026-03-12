@@ -57,7 +57,7 @@ Mivel az alkalmazás **Supabase** backendet használ:
 ---
 
 ## 👥 Készítők
-- **Makkai Rebeka** & VisualStock Team
+- **Bujdosó Rita**, **Kunszt Viktor**, **Makkai Rebeka**
 
 ---
 
