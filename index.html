@@ -26,6 +26,32 @@
         <div class="blob blob-3"></div>
     </div>
 
+    <!-- LOGIN OVERLAY -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="ph-fill ph-cube-transparent login-logo"></i>
+                <h2>VISUALSTOCK</h2>
+                <div class="subtitle">Belépés a rendszerbe</div>
+            </div>
+            <div class="login-form">
+                <div class="input-group">
+                    <i class="ph-bold ph-user"></i>
+                    <input type="text" id="username" placeholder="Felhasználónév">
+                </div>
+                <div class="input-group">
+                    <i class="ph-bold ph-key"></i>
+                    <input type="password" id="password" placeholder="Jelszó">
+                </div>
+                <button type="button" class="btn-login" onclick="handleLogin()">
+                    <span>BEJELENTKEZÉS</span>
+                    <i class="ph-bold ph-arrow-right"></i>
+                </button>
+                <div id="loginError" class="login-error"></div>
+            </div>
+        </div>
+    </div>
+
     <header>
         <div class="header-content">
             <div class="brand">
@@ -39,8 +65,12 @@
             <div class="header-right">
 
                 <div class="system-status">
+                    <div id="userBadge" class="user-badge admin-only">
+                        <i class="ph-bold ph-user-circle-gear"></i> <span id="userNameDisplay">Admin</span>
+                    </div>
+
                     <div class="badge-kulcssoft">
-                        <i class="ph-bold ph-arrows-left-right"></i> Kulcs-Soft Kapcsolat
+                        <i class="ph-bold ph-arrows-left-right"></i> Kulcs-Soft
                         <span class="status-dot online"></span>
                     </div>
 
@@ -49,9 +79,20 @@
                     </div>
                 </div>
 
-                <button class="btn-sync" onclick="simulateSync()">
-                    <i class="ph-bold ph-arrows-clockwise"></i> <span>Adatok Szinkronizálása</span>
-                </button>
+                <div class="header-actions">
+                    <button id="btnBulkSave" class="btn-bulk-save admin-only" onclick="confirmBulkUpdate()" disabled>
+                        <i class="ph-bold ph-floppy-disk"></i> <span>Módosítás Mentése</span>
+                        <span id="pendingCount" class="pending-count">0</span>
+                    </button>
+
+                    <button class="btn-sync" onclick="simulateSync()">
+                        <i class="ph-bold ph-arrows-clockwise"></i> <span>Szinkron</span>
+                    </button>
+
+                    <button class="btn-logout" onclick="handleLogout()">
+                        <i class="ph-bold ph-sign-out"></i>
+                    </button>
+                </div>
 
             </div>
         </div>
@@ -99,13 +140,14 @@
         <div class="footer-content">
             <div class="footer-branding">
                 <span class="copyright">© 2026 VISUALSTOCK PREMIUM</span>
-                <span class="tagline">Professional Inventory Management Solutions</span>
+                <span class="tagline">Makkai Rebeka /// Professional Inventory Solutions</span>
             </div>
-            <div class="footer-version">v28.0.4 - All Rights Reserved</div>
+            <div class="footer-version">v29.0.0 - Premium Edition</div>
         </div>
     </footer>
 
     <script src="script.js?v=31"></script>
+
 </body>
 
 </html>

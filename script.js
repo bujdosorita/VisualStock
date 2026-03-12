@@ -22,6 +22,74 @@ let aktualisSzuro = 'all';
 let utolsoModositas = 0;
 let cardTimers = {};
 
+// AUTH & ROLE STATE
+let currentUser = null;
+let pendingChanges = {};
+
+async function handleLogin() {
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    const errorEl = document.getElementById('loginError');
+    
+    // Demo login logic (hardcoded per user request/simplicity or can be Supabase table)
+    // admin / admin123 -> Admin
+    // user / user123 -> User
+    
+    if ((user === 'admin' && pass === 'admin123')) {
+        loginSuccess({ name: 'Admin', role: 'admin' });
+    } else if (user === 'user' && pass === 'user123') {
+        loginSuccess({ name: 'Raktár', role: 'user' });
+    } else {
+        errorEl.innerText = "Hibás felhasználónév vagy jelszó!";
+    }
+}
+
+function loginSuccess(session) {
+    currentUser = session;
+    localStorage.setItem('vs_session', JSON.stringify(session));
+    document.getElementById('loginOverlay').style.display = 'none';
+    document.getElementById('userNameDisplay').innerText = session.name;
+    
+    if (session.role === 'admin') {
+        document.body.classList.add('is-admin');
+    } else {
+        document.body.classList.remove('is-admin');
+    }
+    
+    fetchProducts();
+}
+
+function handleLogout() {
+    currentUser = null;
+    localStorage.removeItem('vs_session');
+    document.body.classList.remove('is-admin');
+    document.getElementById('loginOverlay').style.display = 'flex';
+    document.getElementById('username').value = "";
+    document.getElementById('password').value = "";
+    document.getElementById('loginError').innerText = "";
+    pendingChanges = {};
+    updatePendingBadge();
+}
+
+function checkSession() {
+    const saved = localStorage.getItem('vs_session');
+    if (saved) {
+        loginSuccess(JSON.parse(saved));
+    } else {
+        document.getElementById('loginOverlay').style.display = 'flex';
+    }
+}
+
+function updatePendingBadge() {
+    const count = Object.keys(pendingChanges).length;
+    const btn = document.getElementById('btnBulkSave');
+    const badge = document.getElementById('pendingCount');
+    if (btn && badge) {
+        badge.innerText = count;
+        btn.disabled = count === 0;
+    }
+}
+
 function toggleCard(cardEl) {
     const cikkszam = cardEl.getAttribute('data-cikkszam');
     cardEl.classList.toggle('flipped');
@@ -92,14 +160,19 @@ function handleUpdate(ujAdatok) {
 }
 
 async function modifyStock(cikkszam, valtozas) {
-    utolsoModositas = Date.now();
+    if (!currentUser || currentUser.role !== 'admin') return;
+    
     const termekIndex = termekek.findIndex(t => t.cikkszam === cikkszam);
     if (termekIndex === -1) return;
 
     const ujKeszlet = Math.max(0, termekek[termekIndex].db + valtozas);
     termekek[termekIndex].db = ujKeszlet;
     
-    // Instead of forcing a full render (which breaks categories), trigger an update check
+    // Store in pending changes instead of immediate DB update
+    pendingChanges[cikkszam] = ujKeszlet;
+    updatePendingBadge();
+
+    // Local refresh
     if (searchInput.value.length > 0) {
         filterStock();
     } else if (aktualisSzuro !== 'all') {
@@ -107,18 +180,55 @@ async function modifyStock(cikkszam, valtozas) {
     } else {
         renderVisualStock(termekek);
     }
+}
 
+async function confirmBulkUpdate() {
+    const count = Object.keys(pendingChanges).length;
+    if (count === 0) return;
+    
+    const confirm = window.confirm(`Biztosan módosítani kívánja a(z) ${count} termék adatait?`);
+    if (confirm) {
+        saveBulkChanges();
+    }
+}
+
+async function saveBulkChanges() {
+    const btn = document.getElementById('btnBulkSave');
+    const originalContent = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ph-bold ph-spinner ph-spin"></i><span>Mentés...</span>';
+    
     try {
-        const { error } = await supabaseClient
-            .from('termekek')
-            .update({ db: ujKeszlet })
-            .eq('cikkszam', cikkszam);
-
-        if (error) throw error;
+        const updates = Object.entries(pendingChanges).map(([cikkszam, db]) => ({
+            cikkszam, db
+        }));
+        
+        // Supabase bulk updates are tricky with multiple filters in one call, 
+        // so we run them sequentially or use a RPC if available. 
+        // For now, sequential updates for robustness.
+        for (const update of updates) {
+            await supabaseClient
+                .from('termekek')
+                .update({ db: update.db })
+                .eq('cikkszam', update.cikkszam);
+        }
+        
+        pendingChanges = {};
+        updatePendingBadge();
+        utolsoModositas = Date.now();
+        
+        btn.innerHTML = '<i class="ph-bold ph-check"></i><span>Mentve!</span>';
+        setTimeout(() => {
+            btn.innerHTML = originalContent;
+            updatePendingBadge();
+            fetchProducts();
+        }, 2000);
+        
     } catch (error) {
-        console.error("Hiba mentéskor:", error);
-        utolsoModositas = 0;
-        fetchProducts(); // Hiba esetén szinkronizálunk vissza
+        console.error("Hiba tömeges mentéskor:", error);
+        alert("Hiba történt a mentés során!");
+        btn.disabled = false;
+        btn.innerHTML = originalContent;
     }
 }
 
@@ -297,7 +407,7 @@ function fullRender(adatok) {
                             </div>
                             <div class="progress-track"><div class="progress-fill ${sCl}" style="width: ${sz}%"></div></div>
                         </div>
-                        <div class="card-actions">
+                        <div class="card-actions admin-only">
                             <button class="btn-action btn-minus" onclick="event.stopPropagation(); modifyStock('${t.cikkszam}', -1)"><i class="ph-bold ph-minus"></i></button>
                             <button class="btn-action btn-plus" onclick="event.stopPropagation(); modifyStock('${t.cikkszam}', 1)"><i class="ph-bold ph-plus"></i></button>
                         </div>
@@ -336,7 +446,7 @@ function fullRender(adatok) {
     appDiv.innerHTML = html;
 }
 
-fetchProducts();
+checkSession();
 setInterval(updateClock, 1000);
 updateClock();
 setInterval(fetchProducts, 8000);

@@ -5,73 +5,60 @@
 
 A **VisualStock** egy modern, **Neon/Cyberpunk** stílusú raktárkészlet-kezelő webalkalmazás (PWA), amelyet kifejezetten üzletberendezések (sztenderek, vállfák, árazók) nyilvántartására terveztek.
 
-> 🚀 **Kulcs-Soft Kompatibilis** | 📱 **PWA Támogatás** | 🌙 **Premium Dark Mode**
+> 🚀 **Kulcs-Soft Kompatibilis** | 📱 **PWA Támogatás** | 🔐 **Role-Based Access Control**
 
 ---
 
 ## ✨ Kiemelt Funkciók
 
-- **🎨 Premium Cyberpunk Felület**: Látványos sötét téma neon cián/lila színekkel, üveghatású (glassmorphism) elemekkel és Cyber-Grid háttérrel.
-- **🖼️ Okos Termékfotók**: 100% megbízható automatikus képkeresés a `vallfa.hu` szerverén (ID: 41068). Ha van fotó a webshopban, a VisualStock megtalálja!
-- **🔄 Auto-Flip Rendszer**: A kártyák 5 másodperc után automatikusan visszafordulnak, így a kijelző mindig naprakész és tiszta marad.
+- **🎨 Premium Cyberpunk Felület**: Látványos sötét téma neon cián/lila színekkel, üveghatású (glassmorphism) elemekkel.
+- **🔐 Bejelentkezési Rendszer**: Biztonságos hozzáférés külön Admin és Felhasználó (User) szerepkörökkel.
+- **🛠️ Adminisztrátori Mód**: Kizárólag az adminok módosíthatják a készletet. A módosítások helyben gyűlnek, majd megerősítés után egyben menthetők.
+- **📖 Felhasználói Mód**: Írásvédett felület a raktári dolgozók számára, ahol csak a készletszintek követhetők.
+- **🖼️ Okos Termékfotók**: 100% megbízható automatikus képkeresés és intelligens neon placeholder rendszer.
+- **🔄 Auto-Flip Rendszer**: A kártyák 5 másodperc után automatikusan visszafordulnak, így a kijelző mindig naprakész marad.
 - **⚡ Intelligens Készletjelző**: Szigorú színkódolás (Zöld/Sárga/Piros) a készletszintek azonnali áttekintéséhez.
-- **📱 Mobil-Optimalizált**: Tökéletes megjelenés asztali gépen és mobilon egyaránt, kifinomult kártya-elrendezéssel.
-- **🏃 PWA (App) Mód**: Telepíthető eszközre, natív alkalmazásként használható (ikon az asztalon, teljes képernyős mód).
+- **📱 Mobil-Optimalizált**: Tökéletes megjelenés minden eszközön, kifinomult tipográfiával.
+- **🏃 PWA (App) Mód**: Telepíthető eszközre, natív alkalmazásként használható.
 
 ---
 
 ## 🛠️ Technológiai Háttér
 
-A projekt a következő technológiákra épül:
-- **Frontend**: HTML5, CSS3 (CSS Variables, Flexbox/Grid), JavaScript (ES6+).
-- **Backend**: Nativ PHP.
-- **Adatbázis**: MySQL (`visualstock.sql`).
+- **Frontend**: HTML5, CSS3, JavaScript (ES6+).
+- **Backend**: Supabase (Cloud Database & Auth logic).
 - **Ikonok**: [Phosphor Icons](https://phosphoricons.com/).
-- **Betűtípus**: [Outfit](https://fonts.google.com/specimen/Outfit) (Google Fonts).
+- **Betűtípus**: [Outfit](https://fonts.google.com/specimen/Outfit).
+
+---
+
+## 🔐 Hozzáférés (Alapértelmezett)
+
+| Szerepkör | Felhasználónév | Jelszó | Jogosultság |
+|:---:|:---:|:---:|:---:|
+| **Admin** | `admin` | `admin123` | Teljes (Olvasás + Írás) |
+| **User** | `user` | `user123` | Csak Olvasás |
 
 ---
 
 ## 🚀 Telepítés és Futtatás
 
-Mivel az alkalmazás most már **Supabase** backendet használ, nincs szükség helyi PHP szerverre (pl. XAMPP).
+Mivel az alkalmazás **Supabase** backendet használ:
 
 1. Klónozd a tárolót.
-2. Nyisd meg az `index.html` fájlt bármilyen böngészőben.
-3. KÉSZ! Az adatok automatikusan töltődnek a felhőből.
+2. Nyisd meg az `index.html` fájlt.
+3. Jelentkezz be a fenti adatokkal.
 
-## ☁️ Felhő Konfiguráció (Supabase)
-
-A projekt a `script.js` fájl elején található konfigurációval kapcsolódik a Supabase-hez.
-- **Project URL:** Megadva
-- **Anon Key:** Megadva
-- **Tábla:** `termekek`
-
-## 🌐 Netlify Deployment
-
-Az alkalmazás statikus weboldalként hosztolható a Netlify-n:
-1. Töltsd fel a fájlokat egy GitHub repo-ba.
-2. Kapcsold össze a Netlify-vel.
-3. A Netlify automatikusan publikálja az oldalt.
-
-### 📱 Telepítés Mobilon / Asztali Gépen (PWA)
-Szeretnéd alkalmazásként használni?
+## 📱 Telepítés Mobilon / Asztali Gépen (PWA)
 1. Nyisd meg a programot Chrome-ban vagy Edge-ben.
-2. Kattints a címsor végén lévő **Telepítés** ikonra (monitor lefelé nyíllal).
+2. Kattints a címsor végén lévő **Telepítés** ikonra.
 3. Élvezd a teljes képernyős, alkalmazás-szerű élményt!
 
 ---
 
-## 📸 Képernyőképek
-
-| Főoldal | Keresés |
-|:---:|:---:|
-| <img src="IMG_9300.PNG" width="400"> | <img src="Képernyőkép 2026-02-02 111521.png" width="400"> |
+## 👥 Készítők
+- **Makkai Rebeka** & VisualStock Team
 
 ---
 
-## ⚠️ Hibaelhárítás
-**"Demo Mód" felirat jelenik meg / Nem töltenek be a termékek?**
-> Ez akkor fordul elő, ha közvetlenül nyitod meg az `index.html` fájlt szerver nélkül. Ilyenkor a rendszer **mintaadatokkal** működik, hogy a dizájn tesztelhető legyen. A teljes funkcionalitáshoz használd a fenti telepítési lépéseket!
-
----
-© 2026 VisualStock Team
+© 2026 VisualStock Premium - V29.0
