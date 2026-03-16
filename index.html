@@ -34,27 +34,61 @@
                 <h2>VISUALSTOCK</h2>
                 <div class="subtitle">Belépés a rendszerbe</div>
             </div>
-            <div class="login-form">
-                <div class="input-group">
-                    <i class="ph-bold ph-user"></i>
-                    <input type="text" id="username" placeholder="Felhasználónév">
+            <!-- LOGIN VIEW -->
+            <div id="loginFormView">
+                <div class="login-form">
+                    <div class="input-group">
+                        <i class="ph-bold ph-user"></i>
+                        <input type="text" id="username" placeholder="Felhasználónév">
+                    </div>
+                    <div class="input-group">
+                        <i class="ph-bold ph-key"></i>
+                        <input type="password" id="loginPassword" placeholder="Jelszó">
+                        <i class="ph-bold ph-eye password-toggle" onclick="togglePasswordVisibility('loginPassword')"></i>
+                    </div>
+                    <button type="button" class="btn-login" onclick="handleLogin()">
+                        <span>BEJELENTKEZÉS</span>
+                        <i class="ph-bold ph-arrow-right"></i>
+                    </button>
+                    <div id="loginError" class="login-error"></div>
+                    <div class="auth-switch">
+                        Nincs még fiókod? <a href="#" onclick="toggleLoginView('reg')">Regisztráció</a>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <i class="ph-bold ph-key"></i>
-                    <input type="password" id="password" placeholder="Jelszó">
+            </div>
+
+            <!-- REGISTER VIEW -->
+            <div id="regFormView" style="display: none;">
+                <div class="login-form">
+                    <div class="input-group">
+                        <i class="ph-bold ph-user-plus"></i>
+                        <input type="text" id="regUsername" placeholder="Felhasználónév">
+                    </div>
+                    <div class="input-group">
+                        <i class="ph-bold ph-envelope"></i>
+                        <input type="email" id="regEmail" placeholder="E-mail cím">
+                    </div>
+                    <div class="input-group">
+                        <i class="ph-bold ph-key"></i>
+                        <input type="password" id="regPassword" placeholder="Jelszó választása">
+                        <i class="ph-bold ph-eye password-toggle" onclick="togglePasswordVisibility('regPassword')"></i>
+                    </div>
+                    <button type="button" class="btn-login" onclick="handleRegister()">
+                        <span>REGISZTRÁCIÓ</span>
+                        <i class="ph-bold ph-user-plus"></i>
+                    </button>
+                    <div id="regError" class="login-error"></div>
+                    <div class="auth-switch">
+                        Van már fiókod? <a href="#" onclick="toggleLoginView('login')">Bejelentkezés</a>
+                    </div>
                 </div>
-                <button type="button" class="btn-login" onclick="handleLogin()">
-                    <span>BEJELENTKEZÉS</span>
-                    <i class="ph-bold ph-arrow-right"></i>
-                </button>
-                <div id="loginError" class="login-error"></div>
             </div>
         </div>
     </div>
 
     <header>
         <div class="header-content">
-            <div class="brand">
+            <div class="brand" onclick="renderDashboard()" style="cursor: pointer;">
                 <div class="logo-icon"><i class="ph-fill ph-cube-transparent"></i></div>
                 <div>
                     <h1>VISUALSTOCK</h1>
@@ -140,7 +174,7 @@
         <div class="footer-content">
             <div class="footer-branding">
                 <span class="copyright">© 2026 VISUALSTOCK PREMIUM</span>
-                <span class="tagline">Makkai Rebeka /// Professional Inventory Solutions</span>
+                <span class="tagline">Bujdosó Rita /// Kunszt Viktor /// Makkai Rebeka</span>
             </div>
             <div class="footer-version">v29.0.0 - Premium Edition</div>
         </div>

@@ -21,26 +21,124 @@ let termekek = [];
 let aktualisSzuro = 'all';
 let utolsoModositas = 0;
 let cardTimers = {};
+let lastSyncTime = null;
 
 // AUTH & ROLE STATE
 let currentUser = null;
 let pendingChanges = {};
 
+async function hashPassword(password) {
+    const msgUint8 = new TextEncoder().encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 async function handleLogin() {
     const user = document.getElementById('username').value.trim();
-    const pass = document.getElementById('password').value.trim();
+    const pass = document.getElementById('loginPassword').value.trim();
     const errorEl = document.getElementById('loginError');
     
-    // Demo login logic (hardcoded per user request/simplicity or can be Supabase table)
-    // admin / admin123 -> Admin
-    // user / user123 -> User
-    
-    if ((user === 'admin' && pass === 'admin123')) {
+    if (!user || !pass) {
+        errorEl.innerText = "Kérlek tölts ki minden mezőt!";
+        return;
+    }
+
+    // Single shared admin check
+    if (user === 'admin' && pass === 'admin123') {
         loginSuccess({ name: 'Admin', role: 'admin' });
-    } else if (user === 'user' && pass === 'user123') {
-        loginSuccess({ name: 'Raktár', role: 'user' });
+        return;
+    }
+
+    try {
+        const hashedPass = await hashPassword(pass);
+        const { data, error } = await supabaseClient
+            .from('felhasznalok')
+            .select('*')
+            .or(`username.eq.${user},email.eq.${user}`)
+            .eq('password', hashedPass)
+            .single();
+
+        if (error || !data) {
+            errorEl.innerText = "Hibás adatok vagy jelszó!";
+        } else {
+            loginSuccess({ name: data.username, role: data.role });
+        }
+    } catch (e) {
+        console.error("Login hiba:", e);
+        errorEl.innerText = "Hiba történt a bejelentkezés során!";
+    }
+}
+
+async function handleRegister() {
+    const user = document.getElementById('regUsername').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const pass = document.getElementById('regPassword').value.trim();
+    const errorEl = document.getElementById('regError');
+    
+    if (!user || !email || !pass) {
+        errorEl.innerText = "Kérlek tölts ki minden mezőt!";
+        return;
+    }
+
+    if (!email.includes('@')) {
+        errorEl.innerText = "Érvénytelen e-mail cím!";
+        return;
+    }
+
+    if (user.toLowerCase() === 'admin') {
+        errorEl.innerText = "Az 'admin' név foglalt!";
+        return;
+    }
+
+    try {
+        const hashedPass = await hashPassword(pass);
+        const { error } = await supabaseClient
+            .from('felhasznalok')
+            .insert([{ username: user, email: email, password: hashedPass, role: 'user' }]);
+
+        if (error) {
+            console.error("Regisztrációs Supabase hiba:", error);
+            if (error.code === '23505') {
+                errorEl.innerText = "A név vagy e-mail már létezik!";
+            } else {
+                errorEl.innerText = "Szerver hiba (" + error.code + "): " + error.message;
+            }
+        } else {
+            alert("Sikeres regisztráció! Most már bejelentkezhetsz.");
+            toggleLoginView('login');
+        }
+    } catch (e) {
+        console.error("Regisztrációs kliens hiba:", e);
+        errorEl.innerText = "Hiba történt: " + e.message;
+    }
+}
+
+function togglePasswordVisibility(inputId) {
+    const input = document.getElementById(inputId);
+    const icon = input.parentElement.querySelector('.password-toggle');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('ph-eye', 'ph-eye-slash');
     } else {
-        errorEl.innerText = "Hibás felhasználónév vagy jelszó!";
+        input.type = 'password';
+        icon.classList.replace('ph-eye-slash', 'ph-eye');
+    }
+}
+
+function toggleLoginView(view) {
+    const loginForm = document.getElementById('loginFormView');
+    const regForm = document.getElementById('regFormView');
+    const loginError = document.getElementById('loginError');
+    const regError = document.getElementById('regError');
+
+    if (view === 'reg') {
+        loginForm.style.display = 'none';
+        regForm.style.display = 'block';
+        regError.innerText = "";
+    } else {
+        loginForm.style.display = 'block';
+        regForm.style.display = 'none';
+        loginError.innerText = "";
     }
 }
 
@@ -56,7 +154,83 @@ function loginSuccess(session) {
         document.body.classList.remove('is-admin');
     }
     
-    fetchProducts();
+    // Alapértelmezetten a Dashboardot töltjük be
+    fetchProducts(true); 
+}
+
+function renderDashboard() {
+    aktualisSzuro = 'dashboard';
+    appDiv.classList.remove('grid-container'); 
+    
+    const lowStockItems = termekek.filter(t => {
+        let sz = t.max > 0 ? (t.db / t.max) * 100 : 0;
+        return sz < 20 || t.db <= 0;
+    });
+
+    const totalItems = termekek.length;
+    const criticalCount = lowStockItems.length;
+    const kasszaCount = termekek.filter(t => getTermekCategory(t) === 'kasszaszalag').length;
+
+    // Ha már ott vagyunk a Dashboardon, csak a számokat frissítjük (nincs villogás)
+    const existingDash = document.querySelector('.dashboard-container');
+    if (existingDash) {
+        const valTotal = document.getElementById('stat-total-val');
+        const valCrit = document.getElementById('stat-crit-val');
+        const valKassza = document.getElementById('stat-kassza-val');
+        const valSync = document.getElementById('last-sync-time');
+        if (valTotal) valTotal.innerText = totalItems;
+        if (valCrit) valCrit.innerText = criticalCount;
+        if (valKassza) valKassza.innerText = kasszaCount;
+        if (valSync) valSync.innerText = lastSyncTime || '--:--:--';
+        return;
+    }
+
+    appDiv.classList.remove('grid-container'); 
+    document.querySelectorAll('.category-buttons button').forEach(b => b.classList.remove('active-btn'));
+
+    let html = `
+        <div class="dashboard-container">
+            <div class="dashboard-welcome">
+                <h2>Üdvözlünk, ${currentUser.name}!</h2>
+                <div class="sync-status">
+                    <i class="ph-bold ph-arrows-clockwise"></i>
+                    <span>Utolsó készlet lekérés: <strong id="last-sync-time">${lastSyncTime || '--:--:--'}</strong></span>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card" onclick="filterCategory('all')">
+                    <div class="stat-icon"><i class="ph-fill ph-package"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-total-val">${totalItems}</span>
+                        <span class="stat-label">Összes Termék</span>
+                    </div>
+                </div>
+                <div class="stat-card critical" onclick="filterCritical()">
+                    <div class="stat-icon"><i class="ph-fill ph-warning-octagon"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-crit-val">${criticalCount}</span>
+                        <span class="stat-label">Kritikus Készlet</span>
+                    </div>
+                </div>
+                <div class="stat-card accent" onclick="filterCategory('kasszaszalag')">
+                    <div class="stat-icon"><i class="ph-fill ph-receipt"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-kassza-val">${kasszaCount}</span>
+                        <span class="stat-label">Kasszapapírok</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-actions">
+                <h3>Gyorsműveletek</h3>
+                <div class="quick-links">
+                    <button onclick="filterCategory('all')"><i class="ph-bold ph-magnifying-glass"></i> Termékek böngészése</button>
+                    ${currentUser.role === 'admin' ? '<button onclick="simulateSync()"><i class="ph-bold ph-arrows-clockwise"></i> Adatok frissítése</button>' : ''}
+                </div>
+            </div>
+        </div>
+    `;
+    appDiv.innerHTML = html;
 }
 
 function handleLogout() {
@@ -107,7 +281,7 @@ function toggleCard(cardEl) {
     }
 }
 
-async function fetchProducts() {
+async function fetchProducts(showDashboard = false) {
     if (Date.now() - utolsoModositas < 2000) return;
     try {
         const { data, error } = await supabaseClient
@@ -117,20 +291,28 @@ async function fetchProducts() {
 
         if (error) throw error;
 
-        // Map common fields if necessary (Postgres column names vs existing JS expectations)
         const formataltAdatok = data.map(t => ({
             cikkszam: t.cikkszam,
             nev: t.nev,
-            db: parseInt(t.db),
-            max: parseInt(t.max_keszlet), // SQL-ben max_keszlet volt a php-ban pedig max ként ment ki
+            db: Math.max(0, parseInt(t.db)),
+            max: parseInt(t.max_keszlet),
             kep: t.kep || null
         }));
 
-        handleUpdate(formataltAdatok);
+        termekek = formataltAdatok;
+        lastSyncTime = new Date().toLocaleTimeString('hu-HU');
+        
+        if (showDashboard || aktualisSzuro === 'dashboard') {
+            renderDashboard();
+        } else {
+            handleUpdate(formataltAdatok);
+        }
     } catch (error) {
         console.error('Supabase hiba:', error);
-        // Fallback demo adatokra ha nincs kapcsolat
-        if (termekek.length === 0) loadDemoData();
+        if (termekek.length === 0) {
+            loadDemoData();
+            if (showDashboard) renderDashboard();
+        }
     }
 }
 
@@ -145,17 +327,15 @@ function loadDemoData() {
 }
 
 function handleUpdate(ujAdatok) {
-    if (JSON.stringify(ujAdatok) !== JSON.stringify(termekek)) {
-        termekek = ujAdatok;
-        
-        // Reapply current filters WITHOUT resetting the layout if possible
-        if (searchInput.value.length > 0) {
-            filterStock();
-        } else if (aktualisSzuro !== 'all') {
-            filterCategory(aktualisSzuro, false);
-        } else {
-            renderVisualStock(termekek);
-        }
+    termekek = ujAdatok;
+    if (aktualisSzuro === 'dashboard') {
+        renderDashboard();
+    } else if (aktualisSzuro === 'critical') {
+        filterCritical();
+    } else if (searchInput.value.length > 0) {
+        filterStock();
+    } else {
+        filterCategory(aktualisSzuro, false);
     }
 }
 
@@ -280,6 +460,13 @@ function getTermekCategory(t) {
     return 'egyeb';
 }
 
+function filterCritical() {
+    aktualisSzuro = 'critical';
+    document.querySelectorAll('.category-buttons button').forEach(b => b.classList.remove('active-btn'));
+    const szurt = termekek.filter(t => (t.max > 0 ? (t.db/t.max)*100 : 0) < 20 || t.db <= 0);
+    renderVisualStock(szurt);
+}
+
 function filterCategory(kod, clear = true) {
     aktualisSzuro = kod;
     if (clear) {
@@ -298,6 +485,7 @@ function filterCategory(kod, clear = true) {
 }
 
 function renderVisualStock(adatok) {
+    appDiv.classList.add('grid-container'); // Termékeknél legyen grid
     if (adatok.length === 0) {
         appDiv.innerHTML = '<div style="color: var(--text-muted); text-align: center; grid-column: 1/-1; padding: 40px; font-size: 1.2rem;">Ebben a kategóriában nincsenek termékek.</div>';
         return;
