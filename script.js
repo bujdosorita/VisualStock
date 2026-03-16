@@ -246,11 +246,55 @@ function handleLogout() {
 }
 
 function checkSession() {
-    const saved = localStorage.getItem('vs_session');
-    if (saved) {
-        loginSuccess(JSON.parse(saved));
+    console.log("Munkamenet ellenőrzése...");
+    try {
+        const saved = localStorage.getItem('vs_session');
+        if (saved) {
+            console.log("Mentett munkamenet megtalálva:", JSON.parse(saved).name);
+            loginSuccess(JSON.parse(saved));
+        } else {
+            console.log("Nincs mentett munkamenet, belépő megjelenítése.");
+            const overlay = document.getElementById('loginOverlay');
+            if (overlay) {
+                overlay.style.display = 'flex';
+            } else {
+                console.error("KRITIKUS: loginOverlay elem nem található!");
+            }
+        }
+    } catch (e) {
+        console.error("Session check error:", e);
+        const overlay = document.getElementById('loginOverlay');
+        if (overlay) overlay.style.display = 'flex';
+    }
+}
+
+function updateClock() {
+    const now = new Date();
+    const clockEl = document.getElementById('clock');
+    if (clockEl) {
+        clockEl.innerText = now.toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
+    }
+}
+
+async function simulateSync() {
+    if (!currentUser || currentUser.role !== 'admin') return;
+    const btn = event?.target?.closest('button');
+    if (btn) {
+        const originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="ph-bold ph-circle-notch animate-spin"></i> Szinkronizálás...';
+        
+        await fetchProducts(aktualisSzuro === 'dashboard');
+        
+        setTimeout(() => {
+            btn.innerHTML = '<i class="ph-bold ph-check"></i> Kész!';
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }, 2000);
+        }, 1000);
     } else {
-        document.getElementById('loginOverlay').style.display = 'flex';
+        await fetchProducts(aktualisSzuro === 'dashboard');
     }
 }
 
@@ -634,7 +678,11 @@ function fullRender(adatok) {
     appDiv.innerHTML = html;
 }
 
-checkSession();
-setInterval(updateClock, 1000);
-updateClock();
-setInterval(fetchProducts, 8000);
+try {
+    checkSession();
+    setInterval(updateClock, 1000);
+    updateClock();
+    setInterval(() => fetchProducts(), 10000); 
+} catch (e) {
+    console.error("Iniciáló hiba:", e);
+}
